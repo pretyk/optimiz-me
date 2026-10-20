@@ -1,0 +1,201 @@
+import { test, expect } from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
+
+const field = (page, label) => page.getByRole('textbox', { name: label, exact: true });
+const commit = (page) => page.getByRole('button', { name: 'חשב סימולציה', exact: true });
+const setSlider = async (page, label, value) => {
+  const slider = page.getByRole('slider', { name: `${label} - מחוון`, exact: true });
+  await slider.evaluate((element, next) => {
+    Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value').set.call(element, String(next));
+    element.dispatchEvent(new Event('input', { bubbles: true }));
+    element.dispatchEvent(new Event('change', { bubbles: true }));
+  }, value);
+};
+
+test.beforeEach(async ({ page }) => { await page.goto('/'); });
+
+test('loads Hebrew RTL, privacy badge and complete numeric controls', async ({ page }) => {
+  await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
+  await expect(page.locator('html')).toHaveAttribute('lang', 'he');
+  await expect(page.getByText('100% אנונימי - הנתונים מחושבים בדפדפן שלך בלבד')).toBeVisible();
+  await expect(page.getByRole('slider')).toHaveCount(8);
+  await expect(page.getByRole('textbox')).toHaveCount(8);
+  await expect(field(page, 'חיסכון נזיל / תיק השקעות')).toHaveValue('1,800,000');
+  await expect(page.getByTestId('bridge-net')).not.toHaveText(/NaN|Infinity|—/);
+});
+
+test('keeps results and chart locked, then commits draft delta', async ({ page }) => {
+  const before = await page.getByTestId('bridge-net').textContent();
+  const chart = await page.getByTestId('capital-chart').innerHTML();
+  await field(page, 'חיסכון נזיל / תיק השקעות').fill('2,800,000');
+  await expect(page.getByText('מצב טיוטה - לחץ על חישוב לעדכון')).toBeVisible();
+  await expect(page.getByTestId('bridge-net')).toHaveText(before);
+  expect(await page.getByTestId('capital-chart').innerHTML()).toBe(chart);
+  await expect(page.getByTestId('delta').first()).toContainText('+');
+  await commit(page).click();
+  await expect(page.getByTestId('bridge-net')).not.toHaveText(before);
+  await expect(page.getByText('מצב טיוטה - לחץ על חישוב לעדכון')).toHaveCount(0);
+  await expect(page.getByTestId('confetti')).toBeAttached();
+});
+
+test('updates pension tax alert immediately from slider in all tax bands', async ({ page }) => {
+  const pension = await page.getByTestId('pension-net').textContent();
+  await setSlider(page, 'גיל משיכת פנסיה', 59);
+  await expect(page.getByTestId('tax-alert')).toHaveClass(/danger/);
+  await expect(page.getByTestId('tax-alert')).toContainText('35%');
+  await setSlider(page, 'גיל משיכת פנסיה', 60);
+  await expect(page.getByTestId('tax-alert')).toHaveClass(/warning/);
+  await setSlider(page, 'גיל משיכת פנסיה', 67);
+  await expect(page.getByTestId('tax-alert')).toHaveClass(/success/);
+  await expect(page.getByTestId('pension-net')).toHaveText(pension);
+});
+
+test('uses female threshold live without changing locked results', async ({ page }) => {
+  await setSlider(page, 'גיל משיכת פנסיה', 65);
+  await expect(page.getByTestId('tax-alert')).toHaveClass(/warning/);
+  await page.getByRole('button', { name: 'אישה', exact: true }).click();
+  await expect(page.getByTestId('tax-alert')).toHaveClass(/success/);
+  await expect(page.getByTestId('annuity-factor')).toHaveText('200');
+});
+
+test('profiles are draft-only and preserve requested preset values', async ({ page }) => {
+  const before = await page.getByTestId('bridge-net').textContent();
+  await page.getByRole('button', { name: 'הייטקיסט צעיר', exact: true }).click();
+  await expect(field(page, 'גיל נוכחי')).toHaveValue('32');
+  await expect(field(page, 'גיל הפסקת עבודה - תחילת גישור')).toHaveValue('45');
+  await expect(field(page, 'צבירה נוכחית בקרן הפנסיה')).toHaveValue('600,000');
+  await expect(page.getByTestId('bridge-net')).toHaveText(before);
+  await page.getByRole('button', { name: 'מעבר להוראה - פרישה חלקית', exact: true }).click();
+  await expect(field(page, 'גיל נוכחי')).toHaveValue('45');
+  await expect(field(page, 'קרן השתלמות')).toHaveValue('600,000');
+});
+
+test('steppers and range update both paired controls with formatted amounts', async ({ page }) => {
+  await page.getByRole('button', { name: 'הגדל חיסכון נזיל / תיק השקעות', exact: true }).click();
+  await expect(field(page, 'חיסכון נזיל / תיק השקעות')).toHaveValue('1,810,000');
+  await page.getByRole('button', { name: 'הקטן חיסכון נזיל / תיק השקעות', exact: true }).click();
+  await expect(field(page, 'חיסכון נזיל / תיק השקעות')).toHaveValue('1,800,000');
+  await setSlider(page, 'תשואה שנתית ריאלית צפויה', 0);
+  await expect(field(page, 'תשואה שנתית ריאלית צפויה')).toHaveValue('0');
+  await commit(page).click();
+  await expect(page.getByTestId('bridge-gross')).toHaveText('₪13,889');
+});
+
+test('blocks malformed amounts and invalid timelines with explicit Hebrew errors', async ({ page }) => {
+  await field(page, 'חיסכון נזיל / תיק השקעות').fill('1,2,3');
+  await expect(commit(page)).toBeDisabled();
+  await expect(field(page, 'חיסכון נזיל / תיק השקעות')).toHaveAttribute('aria-invalid', 'true');
+  await field(page, 'חיסכון נזיל / תיק השקעות').fill('1,800,000');
+  await field(page, 'גיל משיכת פנסיה').fill('50');
+  await expect(page.getByTestId('tax-alert')).toHaveClass(/danger/);
+  await expect(commit(page)).toBeDisabled();
+  await expect(page.getByText('גיל משיכת הפנסיה חייב להיות שווה לגיל הפסקת העבודה או מאוחר ממנו.')).toBeVisible();
+  await field(page, 'גיל משיכת פנסיה').fill('67');
+  await expect(commit(page)).toBeEnabled();
+});
+
+test('same-age retirement has no bridge and stays finite', async ({ page }) => {
+  await field(page, 'גיל הפסקת עבודה - תחילת גישור').fill('67');
+  await commit(page).click();
+  await expect(page.getByTestId('bridge-net')).toHaveText('—');
+  await expect(page.getByText(/אין תקופת גישור: הפסקת העבודה/)).toBeVisible();
+  await expect(page.getByTestId('capital-chart')).not.toHaveAttribute('d', /NaN/);
+  expect(await page.getByTestId('capital-chart').innerHTML()).not.toMatch(/NaN|Infinity/);
+});
+
+test('impossible target is flagged, shaking, and never celebrated', async ({ page }) => {
+  await field(page, 'יעד הון להשאיר בגיל פנסיה').fill('100,000,000');
+  await commit(page).click();
+  await expect(page.getByTestId('bridge-card')).toHaveClass(/shake/);
+  await expect(page.getByText(/יעד ההון אינו בר־השגה\. נדרשת הפקדה/)).toBeVisible();
+  await expect(page.getByTestId('confetti')).toHaveCount(0);
+});
+
+test('early pension risk overrides celebration even with high bridge income', async ({ page }) => {
+  await field(page, 'גיל משיכת פנסיה').fill('59');
+  await commit(page).click();
+  await expect(page.getByTestId('bridge-card')).toHaveClass(/shake/);
+  await expect(page.getByTestId('confetti')).toHaveCount(0);
+});
+
+test('formula modal uses committed variables, traps focus and closes with Escape', async ({ page }) => {
+  await field(page, 'גיל משיכת פנסיה').fill('68');
+  await page.getByRole('button', { name: 'הצג נוסחת חישוב' }).click();
+  const dialog = page.getByRole('dialog');
+  await expect(dialog).toBeVisible();
+  await expect(dialog).toContainText('180');
+  await expect(dialog).toContainText('₪3,244,800');
+  await page.keyboard.press('Tab');
+  expect(await page.evaluate(() => document.querySelector('dialog').contains(document.activeElement))).toBe(true);
+  await page.keyboard.press('Shift+Tab');
+  expect(await page.evaluate(() => document.querySelector('dialog').contains(document.activeElement))).toBe(true);
+  await page.keyboard.press('Escape');
+  await expect(dialog).toHaveCount(0);
+  await expect(page.getByRole('button', { name: 'הצג נוסחת חישוב' })).toBeFocused();
+});
+
+test('has no horizontal overflow and meets automated accessibility checks', async ({ page }) => {
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  const accessibility = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze();
+  expect(accessibility.violations).toEqual([]);
+  await page.getByRole('button', { name: 'הצג נוסחת חישוב' }).click();
+  const modalAccessibility = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze();
+  expect(modalAccessibility.violations).toEqual([]);
+});
+
+test('does not send data, persist inputs, or produce runtime errors', async ({ page, baseURL }) => {
+  const external = [], failures = [];
+  page.on('request', (request) => { if (!request.url().startsWith(baseURL)) external.push(request.url()); });
+  page.on('pageerror', (error) => failures.push(error.message));
+  await page.reload();
+  await field(page, 'חיסכון נזיל / תיק השקעות').fill('2,222,222');
+  await commit(page).click();
+  await expect(page.getByTestId('bridge-net')).toBeVisible();
+  expect(external).toEqual([]);
+  expect(failures).toEqual([]);
+  expect(await page.evaluate(() => ({ local: localStorage.length, session: sessionStorage.length, cookies: document.cookie }))).toEqual({ local: 0, session: 0, cookies: '' });
+  await page.reload();
+  await expect(field(page, 'חיסכון נזיל / תיק השקעות')).toHaveValue('1,800,000');
+});
+
+test('honors reduced motion', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await commit(page).click();
+  await expect(page.getByTestId('confetti')).toHaveCSS('display', 'none');
+});
+
+test('keyboard controls respect RTL and returning to the committed values clears dirty mode', async ({ page }) => {
+  const slider = page.getByRole('slider', { name: 'גיל משיכת פנסיה - מחוון', exact: true });
+  await slider.focus();
+  await page.keyboard.press('ArrowLeft');
+  await expect(field(page, 'גיל משיכת פנסיה')).toHaveValue('68');
+  await expect(page.getByText('מצב טיוטה - לחץ על חישוב לעדכון')).toBeVisible();
+  await page.keyboard.press('ArrowRight');
+  await expect(field(page, 'גיל משיכת פנסיה')).toHaveValue('67');
+  await expect(page.getByText('מצב טיוטה - לחץ על חישוב לעדכון')).toHaveCount(0);
+});
+
+test('handles maximum current age and a collapsed bridge-start slider range', async ({ page }) => {
+  await field(page, 'גיל נוכחי').fill('70');
+  await expect(field(page, 'גיל הפסקת עבודה - תחילת גישור')).toHaveValue('70');
+  await expect(commit(page)).toBeDisabled();
+  const slider = page.getByRole('slider', { name: 'גיל הפסקת עבודה - תחילת גישור - מחוון', exact: true });
+  await expect(slider).toHaveAttribute('min', '70');
+  await expect(slider).toHaveAttribute('max', '70');
+  expect(await slider.getAttribute('style')).not.toContain('NaN');
+  await field(page, 'גיל משיכת פנסיה').fill('75');
+  await commit(page).click();
+  await expect(page.getByTestId('annuity-factor')).toHaveText('176');
+  await expect(page.getByTestId('bridge-net')).not.toHaveText(/NaN|Infinity/);
+});
+
+test('preserves custom input precision and rejects hidden fractional digits', async ({ page }) => {
+  await field(page, 'חיסכון נזיל / תיק השקעות').fill('1,800,000.25');
+  await field(page, 'תשואה שנתית ריאלית צפויה').fill('4.25');
+  await field(page, 'תשואה שנתית ריאלית צפויה').blur();
+  await expect(field(page, 'חיסכון נזיל / תיק השקעות')).toHaveValue('1,800,000.25');
+  await expect(field(page, 'תשואה שנתית ריאלית צפויה')).toHaveValue('4.25');
+  await expect(commit(page)).toBeEnabled();
+  await field(page, 'תשואה שנתית ריאלית צפויה').fill('4.251');
+  await expect(commit(page)).toBeDisabled();
+});
