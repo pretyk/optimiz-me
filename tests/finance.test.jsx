@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { calculate, DEFAULT_STATE, feedbackFor, pmt, PROFILES, taxStatus, trajectory, validateState } from '../src/App.jsx';
+import { calculate, DEFAULT_STATE, feedbackFor, pmt, taxStatus, trajectory, validateState } from '../src/App.jsx';
 
 describe('monthly end-of-period drawdown', () => {
   it('matches the specified Excel PMT formula, correcting the PRD benchmark', () => {
@@ -12,7 +12,8 @@ describe('monthly end-of-period drawdown', () => {
   it('rejects zero duration instead of dividing by zero', () => {
     expect(() => pmt(300, 0, 0.01, 0)).toThrow(RangeError);
   });
-  it.each(PROFILES.map((profile) => [profile.name, profile.values]))('leaves exactly the target for %s', (_, state) => {
+  it.each([0, 4, 10])('leaves exactly the target at %s percent return', (annualReturn) => {
+    const state = { ...DEFAULT_STATE, annualReturn };
     const result = calculate(state);
     let balance = result.pv;
     for (let month = 0; month < result.months; month++) balance = balance * (1 + result.rate) - result.gross;

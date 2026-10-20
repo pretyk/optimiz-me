@@ -12,7 +12,11 @@ const setSlider = async (page, label, value) => {
   }, value);
 };
 
-test.beforeEach(async ({ page }) => { await page.goto('/'); });
+const acceptDisclaimer = async (page) => {
+  await page.getByRole('checkbox', { name: /קראתי והבנתי/ }).check();
+  await page.getByRole('button', { name: 'אני מסכים/ה — כניסה לסימולטור', exact: true }).click();
+};
+test.beforeEach(async ({ page }) => { await page.goto('/'); await acceptDisclaimer(page); });
 
 test('loads Hebrew RTL, privacy badge and complete numeric controls', async ({ page }) => {
   await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
@@ -58,16 +62,10 @@ test('uses female threshold live without changing locked results', async ({ page
   await expect(page.getByTestId('annuity-factor')).toHaveText('200');
 });
 
-test('profiles are draft-only and preserve requested preset values', async ({ page }) => {
-  const before = await page.getByTestId('bridge-net').textContent();
-  await page.getByRole('button', { name: 'הייטקיסט צעיר', exact: true }).click();
-  await expect(field(page, 'גיל נוכחי')).toHaveValue('32');
-  await expect(field(page, 'גיל הפסקת עבודה - תחילת גישור')).toHaveValue('45');
-  await expect(field(page, 'צבירה נוכחית בקרן הפנסיה')).toHaveValue('600,000');
-  await expect(page.getByTestId('bridge-net')).toHaveText(before);
-  await page.getByRole('button', { name: 'מעבר להוראה - פרישה חלקית', exact: true }).click();
-  await expect(field(page, 'גיל נוכחי')).toHaveValue('45');
-  await expect(field(page, 'קרן השתלמות')).toHaveValue('600,000');
+test('shows the updated headline without profile selectors', async ({ page }) => {
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('מתי אפשר לעבוד כי רוצים, לא כי חייבים?');
+  await expect(page.getByRole('button', { name: /ארכיטקט תוכנה|הייטקיסט צעיר|מעבר להוראה/ })).toHaveCount(0);
+  await expect(page.locator('.profiles-bar')).toHaveCount(0);
 });
 
 test('steppers and range update both paired controls with formatted amounts', async ({ page }) => {
@@ -148,6 +146,7 @@ test('does not send data, persist inputs, or produce runtime errors', async ({ p
   page.on('request', (request) => { if (!request.url().startsWith(baseURL)) external.push(request.url()); });
   page.on('pageerror', (error) => failures.push(error.message));
   await page.reload();
+  await acceptDisclaimer(page);
   await field(page, 'חיסכון נזיל / תיק השקעות').fill('2,222,222');
   await commit(page).click();
   await expect(page.getByTestId('bridge-net')).toBeVisible();
@@ -155,6 +154,7 @@ test('does not send data, persist inputs, or produce runtime errors', async ({ p
   expect(failures).toEqual([]);
   expect(await page.evaluate(() => ({ local: localStorage.length, session: sessionStorage.length, cookies: document.cookie }))).toEqual({ local: 0, session: 0, cookies: '' });
   await page.reload();
+  await acceptDisclaimer(page);
   await expect(field(page, 'חיסכון נזיל / תיק השקעות')).toHaveValue('1,800,000');
 });
 

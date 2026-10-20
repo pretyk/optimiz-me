@@ -9,6 +9,68 @@ fonts, or financial-data transmission.** Reloading resets the scenario.
 The web host still receives ordinary requests for static assets; anonymity here
 means the app neither collects nor transmits the inputs, not network anonymity.
 
+## Important disclaimer / הבהרה חשובה
+
+**Simulation only. The author is not a financial advisor. This tool does not
+replace professional, individually tailored financial advice. All displayed
+numbers are estimates, not promises. Read the full Hebrew terms below before use.**
+
+### מטרת הכלי והיעדר ייעוץ מקצועי
+
+Optimiz.me נועד ללמידה ולהמחשת תרחישים בלבד. מחבר האתר אינו יועץ פיננסי
+ואינו מספק במסגרת האתר ייעוץ השקעות, שיווק השקעות, ייעוץ פנסיוני, ייעוץ
+מס או ייעוץ משפטי. השימוש אינו יוצר יחסי יועץ–לקוח או חובת נאמנות מקצועית.
+אין בתוכן המלצה, הצעה או שידול לקנות, למכור או להחזיק מוצר פיננסי, למשוך
+כספים או לפרוש מעבודה. נתוני ברירת המחדל הם דוגמה בלבד, ולא המלצה.
+
+### אומדנים בלבד וסביבה משתנה
+
+כל הסכומים, התחזיות, התשואות, הקצבאות, המקדמים ושיעורי המס הם הערכות
+המבוססות על קלט המשתמש ועל הנחות מפושטות. אין התחייבות לדיוק, שלמות,
+עדכניות, התאמה לצורך אישי, רווח, קצבה, פטור ממס או יכולת לממן פרישה.
+ייתכנו טעויות תוכנה, חישוב או תוכן; תוצאות בפועל עשויות להיות שונות מהותית,
+לרבות הפסד הון.
+
+השווקים, האינפלציה, הריבית, דמי הניהול, תוחלת החיים ותנאי המוצרים והקרנות
+עשויים להשתנות. גם החוקים, התקנות, הפרשנות, גילי הפרישה, תקרות המס,
+הפטורים והזכאות לקצבאות עשויים להשתנות בכל עת. האתר אינו מספק נתוני שוק
+בזמן אמת או עדכון אוטומטי של הדין. תשואה קבועה אינה תחזית ואינה משקפת
+במלואה סיכון רצף תשואות, תנודתיות, הפסדים ושינויי יוקר מחיה.
+
+שיעורי המס, גילי הפרישה ומקדמי ההמרה באתר הם הנחות להמחשה, ולא חישוב
+מס או זכאות אישי. פטורי קרן השתלמות וקיבוע זכויות כפופים לדין ולנתונים
+אישיים. תרחיש פנסיה לפני גיל 60 אינו אישור למשיכת קצבה. מגבלות נוספות
+והנחות החישוב מפורטות בפרק המודל הפיננסי להלן.
+
+### חובת בדיקה וייעוץ אישי
+
+אין להסתמך על האתר כבסיס יחיד או מכריע להחלטה. לפני השקעה, משיכה,
+שינוי חיסכון, תכנון מס או פרישה, יש לפנות לייעוץ פיננסי אישי מאיש מקצוע
+מוסמך ובעל רישיון מתאים לפי הדין, ובמידת הצורך ליועץ פנסיוני, יועץ השקעות,
+רואה חשבון, יועץ מס או עורך דין. יש לבדוק עצמאית נתונים, זכאות והוראות
+דין מול הגופים והרשויות הרלוונטיים.
+
+### הגבלת אחריות וזכויות לפי דין
+
+השימוש באתר ובתוצאותיו הוא לפי בחירת המשתמש ועל אחריותו, בכפוף לדין החל.
+האתר ניתן **כפי שהוא וכפי שהוא זמין**, ללא מצג או אחריות מפורשים או
+משתמעים, ככל שהדין מתיר, לרבות ביחס לדיוק, זמינות או התאמה למטרה מסוימת.
+במידה המרבית המותרת בדין, המחבר, המתחזקים והתורמים אינם אחראים לנזק או
+הפסד הנובעים מהשימוש, מחוסר יכולת להשתמש, מהסתמכות על התוכן או משגיאות
+והשמטות, לרבות הפסדי השקעה, אובדן רווח או חיסכון, חבות מס ונזק ישיר,
+עקיף, נלווה או תוצאתי.
+
+אין בהבהרה כדי לשלול זכות קוגנטית או לפטור מאחריות שאי אפשר להגביל או
+לשלול על פי דין. ההגבלות חלות רק במידה המותרת בדין. האישור בכניסה מציין
+הבנה של מטרת הכלי ומגבלותיו ואינו ויתור על זכויות שלא ניתן לוותר עליהן.
+אם אינך מסכים או מסכימה לתנאים, אין להשתמש בסימולטור.
+
+**Maintainer note:** this disclaimer is a draft, not legal advice or a guarantee
+of enforceability. Have an Israeli lawyer review it against the actual service,
+operator, audience, hosting arrangements, and applicable law before relying on it.
+Do not assume a disclaimer excludes liability that the law does not allow to be
+excluded. No server-side consent evidence is collected or retained.
+
 ## Run locally
 
 Requires Node.js 22.12+ in the 22.x line, 24.x (recommended), or 26+, and npm.
@@ -36,7 +98,17 @@ Inline styles are required by the single-file design. Do not add analytics.
 
 ## Using the simulator
 
-- Select a quick profile or enter a custom scenario. Every numeric field has a
+- On each fresh page load, read the entry disclaimer, check the unchecked
+  agreement box, and explicitly accept before using the simulator. The backdrop
+  is blurred and the underlying controls are inert. Escape and backdrop clicks
+  do not accept or dismiss it. Declining leads to the information page.
+- Read the full disclaimer at `/#disclaimer` and the privacy explanation at
+  `/#privacy`, including before acceptance. These are client-side hash routes,
+  so direct links and refresh work on static hosts without routing configuration.
+- Acceptance lives in React memory only: no cookies, local/session storage,
+  timestamp, user identifier, or consent log. Reloading requires acceptance again.
+  Same-page navigation preserves draft inputs and committed results.
+- Enter a custom scenario. Every numeric field has a
   comma-formatted input, plus/minus buttons, an RTL slider, and a Hebrew tooltip.
 - Changes update **draft** values, tax alerts, and monthly delta previews.
   Results, chart, and formula-modal variables stay **committed** until clicking
@@ -45,8 +117,12 @@ Inline styles are required by the single-file design. Do not add analytics.
   independently compounded pension balance. Point at the chart to inspect ages.
 - The formula button opens a keyboard-accessible native dialog. Celebrations
   and deficit feedback respect reduced-motion preferences.
-- Presets are starting balances only. The partial-retirement preset does **not**
-  introduce part-time wages, future contributions, or a different financial model.
+- Profile shortcuts have been removed; initial balances are illustrative defaults.
+- The privacy badge links to the privacy page. Footer links expose both
+  information pages and the public GitHub repository for code contributions.
+  GitHub is an external service, opened only by an explicit click, without a
+  referrer or financial data. Do not include personal financial information in
+  issues, contributions, or screenshots.
 
 ## Financial model and limitations
 
@@ -113,10 +189,13 @@ npm run check
 `npm run check` runs financial unit tests, builds production assets, and runs
 Playwright against a dedicated production preview on port 4173. The browser
 suite covers desktop and mobile Chromium, draft locking, all live tax tiers,
-profiles, formatted inputs, sliders and steppers, invalid timelines, zero-rate
+formatted inputs, sliders and steppers, invalid timelines, zero-rate
 and zero-duration scenarios, impossible targets, confetti and risk precedence,
 modal focus and Escape, overflow, axe accessibility, reduced motion, privacy,
-and runtime errors.
+and runtime errors. Additional tests cover explicit agreement, blocked dismissal,
+declining, keyboard focus, both legal pages, direct-link refresh, browser history,
+draft preservation, acceptance reset, absence of storage or data requests,
+GitHub link attributes, and accessibility before acceptance.
 
 `npm run test:e2e` expects a current `dist` build and a free port 4173.
 Use `npx playwright show-report` to inspect the report. GitHub Actions runs
