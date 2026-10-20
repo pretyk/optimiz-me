@@ -9,6 +9,15 @@ fonts, or financial-data transmission.** Reloading resets the scenario.
 The web host still receives ordinary requests for static assets; anonymity here
 means the app neither collects nor transmits the inputs, not network anonymity.
 
+## License
+
+Licensed under the [MIT License](LICENSE). Copyright (c) 2026 pretyk.
+Use, modification, distribution, and commercial use are permitted provided the
+copyright and permission notice are retained. The software is provided without
+warranty. Third-party dependencies remain under their respective licenses.
+The financial disclaimer below explains the simulator's limitations; it does
+not impose additional restrictions on the rights granted by the MIT License.
+
 ## Important disclaimer / הבהרה חשובה
 
 **Simulation only. The author is not a financial advisor. This tool does not
