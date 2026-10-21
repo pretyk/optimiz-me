@@ -124,7 +124,7 @@ for (const route of ['privacy', 'disclaimer']) {
 test('contribution link targets the repository without sending referrer data', async ({ page }) => {
   await page.goto('/#privacy');
   const link = page.getByRole('link', { name: 'תרומה לקוד ב־GitHub — נפתח בלשונית חדשה' });
-  await expect(link).toHaveAttribute('href', 'https://github.com/pretyk/optimiz-me');
+  await expect(link).toHaveAttribute('href', 'https://github.com/pretyk/retirator');
   await expect(link).toHaveAttribute('target', '_blank');
   await expect(link).toHaveAttribute('rel', 'noopener noreferrer');
 });

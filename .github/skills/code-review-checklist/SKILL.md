@@ -1,9 +1,9 @@
 ---
 name: code-review-checklist
-description: Shared review checklist for Optimiz.me pull requests. Use when reviewing a diff, responding to review feedback, or preparing a PR for merge.
+description: Shared review checklist for Retirator pull requests. Use when reviewing a diff, responding to review feedback, or preparing a PR for merge.
 ---
 
-# Optimiz.me code review checklist
+# Retirator code review checklist
 
 ## Before requesting a review
 

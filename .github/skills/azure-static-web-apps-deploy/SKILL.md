@@ -1,6 +1,6 @@
 ---
 name: azure-static-web-apps-deploy
-description: How Optimiz.me is hosted on Azure Static Web Apps and deployed by GitHub Actions. Use when adding or changing CI/CD, infrastructure, security headers, or the custom domain.
+description: How Retirator is hosted on Azure Static Web Apps and deployed by GitHub Actions. Use when adding or changing CI/CD, infrastructure, security headers, or the custom domain.
 ---
 
 # Azure Static Web Apps deployment

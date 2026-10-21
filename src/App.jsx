@@ -2,7 +2,7 @@ import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import { ArrowLeft, BriefcaseBusiness, Calculator, ChartNoAxesCombined, Check, CircleHelp, Github, Info, Landmark, LockKeyhole, Minus, Plus, ShieldCheck, Target, TrendingUp, TriangleAlert, Wallet, X } from 'lucide-react';
 
 export const DEFAULT_STATE = { currentAge: 50, gender: 'male', bridgeStartAge: 52, pensionAge: 67, liquidSavings: 1800000, hishtalmut: 1200000, targetCapital: 500000, pensionBalance: 2500000, annualReturn: 4 };
-const GITHUB_URL = 'https://github.com/pretyk/optimiz-me';
+const GITHUB_URL = 'https://github.com/pretyk/retirator';
 const DISCLAIMER_SECTIONS = [
   ['סימולציה בלבד — לא ייעוץ פיננסי', 'האתר נועד ללמידה ולהמחשת תרחישים בלבד. מחבר האתר אינו יועץ פיננסי ואינו מספק במסגרת האתר ייעוץ השקעות, שיווק השקעות, ייעוץ פנסיוני, ייעוץ מס או ייעוץ משפטי. השימוש אינו יוצר יחסי יועץ–לקוח או חובת נאמנות מקצועית. אין בתוכן המלצה, הצעה או שידול לקנות, למכור או להחזיק מוצר פיננסי, למשוך כספים או לפרוש מעבודה.'],
   ['כל המספרים הם אומדנים, לא הבטחה', 'כל הסכומים, התשואות, ההכנסות, המקדמים ושיעורי המס המוצגים הם הערכות המבוססות על נתוני המשתמש ועל הנחות מפושטות. נתוני ברירת המחדל הם דוגמה בלבד, לא המלצה. אין התחייבות לדיוק, שלמות, עדכניות, התאמה אישית, רווח, קצבה, פטור ממס או יכולת לממן פרישה. ייתכנו טעויות בתוכנה ובחישובים, ותוצאות בפועל עלולות להיות שונות מהותית, לרבות הפסד הון.'],
@@ -247,7 +247,7 @@ function InformationPage({ page }) {
     <article className="panel information-card">
       <span className="eyebrow">{privacy ? 'שקיפות ופרטיות' : 'שימוש אחראי במידע'}</span>
       <h1 ref={heading} tabIndex={-1}>{privacy ? 'המידע שלך נשאר אצלך' : 'הודעת הבהרה ותנאי שימוש'}</h1>
-      <p className="information-lead">{privacy ? 'בלי חשבון, בלי מעקב ובלי שליחת נתוני הסימולציה.' : 'Optimiz.me הוא כלי להדמיה וללמידה בלבד — לא בסיס לקבלת החלטה פיננסית אישית.'}</p>
+      <p className="information-lead">{privacy ? 'בלי חשבון, בלי מעקב ובלי שליחת נתוני הסימולציה.' : 'Retirator הוא כלי להדמיה וללמידה בלבד — לא בסיס לקבלת החלטה פיננסית אישית.'}</p>
       <p className="document-date">עדכון אחרון: 20 באוקטובר 2026</p>
       {(privacy ? PRIVACY_SECTIONS : DISCLAIMER_SECTIONS).map(([title, text]) => <section key={title}><h2>{title}</h2><p>{text}</p></section>)}
       <nav className="information-links" aria-label="מידע נוסף">
@@ -292,7 +292,7 @@ export default function App() {
     return () => window.removeEventListener('hashchange', onNavigation);
   }, []);
   useEffect(() => {
-    document.title = page === 'privacy' ? 'פרטיות ואי־מעקב | Optimiz.me' : page === 'disclaimer' ? 'הודעת הבהרה ותנאי שימוש | Optimiz.me' : 'Optimiz.me | מתכננים חופש כלכלי';
+    document.title = page === 'privacy' ? 'פרטיות ואי־מעקב | Retirator' : page === 'disclaimer' ? 'הודעת הבהרה ותנאי שימוש | Retirator' : 'Retirator | מתכננים חופש כלכלי';
     if (page === 'simulator' && accepted) document.getElementById('main')?.focus();
   }, [page, accepted]);
   useEffect(() => {
@@ -316,7 +316,7 @@ export default function App() {
   return <div className="app-shell" dir="rtl">
     <style>{styles}</style>
     <a href={page === 'simulator' ? '#main' : '#information'} className="skip-link" onClick={(event) => { event.preventDefault(); document.getElementById(page === 'simulator' ? 'main' : 'information')?.focus(); }}>דלג לתוכן הראשי</a>
-    <header className="site-header"><div className="header-inner"><a className="brand" href="#" aria-label="Optimiz.me — עמוד ראשי"><span className="brand-mark"><ChartNoAxesCombined size={22} /></span><span dir="ltr">optimiz<span className="brand-accent">.me</span></span></a><div className="header-center"><span className="live-dot" />פחות אי־ודאות. יותר חופש.</div><span className="header-tag">סימולטור פרישה מוקדמת <span>גרסה 1.0</span></span></div></header>
+    <header className="site-header"><div className="header-inner"><a className="brand" href="#" aria-label="Retirator — עמוד ראשי"><span className="brand-mark"><ChartNoAxesCombined size={22} /></span><span dir="ltr">retir<span className="brand-accent">ator</span></span></a><div className="header-center"><span className="live-dot" />פחות אי־ודאות. יותר חופש.</div><span className="header-tag">סימולטור פרישה מוקדמת <span>גרסה 1.0</span></span></div></header>
     <main id="main" tabIndex={-1} className="main-container" hidden={page !== 'simulator'} inert={!accepted}>
       <div className="intro"><div><span className="eyebrow"><span className="tiny-line" />העתיד שלך, בתנאים שלך</span><h1>מתי אפשר לעבוד כי רוצים, <span>לא כי חייבים?</span></h1><p>גלו כמה ההון שלכם יכול לספק בכל חודש, איך מגשרים עד הפנסיה ומה נשאר ליום שאחרי.</p></div><div className="privacy-badge"><ShieldCheck size={21} /><div><span>100% אנונימי - הנתונים מחושבים בדפדפן שלך בלבד</span><a className="privacy-more" href="#privacy">למידע נוסף על הפרטיות<ArrowLeft size={12} /></a></div></div></div>
       <div className="workspace">
@@ -359,7 +359,7 @@ export default function App() {
       </div>
     </main>
     {page !== 'simulator' && <InformationPage page={page} />}
-    <div className="footer-container"><footer className="site-footer"><span dir="ltr">optimiz.me</span><nav aria-label="קישורי אתר"><a href="#privacy">פרטיות</a><a href="#disclaimer">הבהרה ותנאי שימוש</a><a className="github-link" href={GITHUB_URL} target="_blank" rel="noopener noreferrer" aria-label="תרומה לקוד ב־GitHub — נפתח בלשונית חדשה"><Github size={15} />תרומה לקוד</a></nav><span><ShieldCheck size={14} /> המידע שלך נשאר אצלך</span></footer></div>
+    <div className="footer-container"><footer className="site-footer"><span dir="ltr">Retirator</span><nav aria-label="קישורי אתר"><a href="#privacy">פרטיות</a><a href="#disclaimer">הבהרה ותנאי שימוש</a><a className="github-link" href={GITHUB_URL} target="_blank" rel="noopener noreferrer" aria-label="תרומה לקוד ב־GitHub — נפתח בלשונית חדשה"><Github size={15} />תרומה לקוד</a></nav><span><ShieldCheck size={14} /> המידע שלך נשאר אצלך</span></footer></div>
     <div className="sr-only" role="status" aria-live="polite">{announcement}</div>
     {page === 'simulator' && !accepted && <EntryDisclaimer onAccept={() => setAccepted(true)} />}
     {page === 'simulator' && accepted && modal && <FormulaModal result={{ ...committed, targetCapital: committedState.targetCapital }} onClose={() => setModal(false)} />}

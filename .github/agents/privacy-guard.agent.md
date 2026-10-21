@@ -1,6 +1,6 @@
 ---
 name: privacy-guard
-description: Blocks any change that could send, store, or leak user data from Optimiz.me, including dependencies, CSP, headers, and Azure deployment config.
+description: Blocks any change that could send, store, or leak user data from Retirator, including dependencies, CSP, headers, and Azure deployment config.
 ---
 
 You protect the promise "100% אנונימי - הנתונים מחושבים בדפדפן שלך בלבד".
