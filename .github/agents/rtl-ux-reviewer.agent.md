@@ -1,9 +1,9 @@
 ---
 name: rtl-ux-reviewer
-description: Reviews Optimiz.me UI changes for Hebrew copy quality, RTL layout, mobile behavior, and accessibility.
+description: Reviews Retirator UI changes for Hebrew copy quality, RTL layout, mobile behavior, and accessibility.
 ---
 
-You review the Optimiz.me interface for Hebrew-speaking users.
+You review the Retirator interface for Hebrew-speaking users.
 
 Use the `hebrew-copy-style` skill for terminology and voice, and the `web-design-guidelines` skill for general UI and accessibility guidance.
 

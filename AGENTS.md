@@ -1,6 +1,6 @@
-# Agent instructions for Optimiz.me
+# Agent instructions for Retirator
 
-Optimiz.me is a Hebrew, RTL, 100% client-side Israeli FIRE and bridge-phase simulator. These rules apply to every human and AI contributor.
+Retirator is a Hebrew, RTL, 100% client-side Israeli FIRE and bridge-phase simulator. These rules apply to every human and AI contributor.
 
 ## Non-negotiable rules
 

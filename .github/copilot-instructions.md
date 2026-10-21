@@ -1,6 +1,6 @@
-# Copilot instructions for Optimiz.me
+# Copilot instructions for Retirator
 
-Follow [`AGENTS.md`](../AGENTS.md). Optimiz.me is a Hebrew RTL, 100% client-side React simulator for Israeli early retirement. All logic lives in `src/App.jsx`.
+Follow [`AGENTS.md`](../AGENTS.md). Retirator is a Hebrew RTL, 100% client-side React simulator for Israeli early retirement. All logic lives in `src/App.jsx`.
 
 ## When reviewing pull requests
 

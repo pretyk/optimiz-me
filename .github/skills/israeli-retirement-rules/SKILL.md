@@ -1,6 +1,6 @@
 ---
 name: israeli-retirement-rules
-description: Source of truth for the Israeli tax, pension, and annuity assumptions used by the Optimiz.me simulator. Use when changing or reviewing financial logic, tests, or result wording.
+description: Source of truth for the Israeli tax, pension, and annuity assumptions used by the Retirator simulator. Use when changing or reviewing financial logic, tests, or result wording.
 ---
 
 # Israeli retirement rules used by the model

@@ -1,6 +1,6 @@
 ---
 name: hebrew-copy-style
-description: Hebrew terminology, tone, and RTL formatting rules for Optimiz.me user-facing text. Use when writing or reviewing any UI copy, tooltips, alerts, or legal pages.
+description: Hebrew terminology, tone, and RTL formatting rules for Retirator user-facing text. Use when writing or reviewing any UI copy, tooltips, alerts, or legal pages.
 ---
 
 # Hebrew copy style

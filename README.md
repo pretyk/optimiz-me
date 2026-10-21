@@ -1,4 +1,4 @@
-# Optimiz.me
+# Retirator
 
 A Hebrew, RTL Israeli early-retirement and bridge-phase planning simulator.
 React, Tailwind CSS, Lucide icons, and Vite. All application components, financial
@@ -26,7 +26,7 @@ numbers are estimates, not promises. Read the full Hebrew terms below before use
 
 ### מטרת הכלי והיעדר ייעוץ מקצועי
 
-Optimiz.me נועד ללמידה ולהמחשת תרחישים בלבד. מחבר האתר אינו יועץ פיננסי
+Retirator נועד ללמידה ולהמחשת תרחישים בלבד. מחבר האתר אינו יועץ פיננסי
 ואינו מספק במסגרת האתר ייעוץ השקעות, שיווק השקעות, ייעוץ פנסיוני, ייעוץ
 מס או ייעוץ משפטי. השימוש אינו יוצר יחסי יועץ–לקוח או חובת נאמנות מקצועית.
 אין בתוכן המלצה, הצעה או שידול לקנות, למכור או להחזיק מוצר פיננסי, למשוך
@@ -176,7 +176,7 @@ Inputs permit amounts up to ₪100 million.
 ### PRD corrections
 
 The supplied document is preserved in
-[`docs/optimiz_me_prd_and_design_doc.md`](docs/optimiz_me_prd_and_design_doc.md).
+[`docs/retirator_prd_and_design_doc.md`](docs/retirator_prd_and_design_doc.md).
 
 - Its numerical benchmark conflicts with its formula. For PV = ₪3,000,000,
   FV = 0, N = 204, and annual return = 4%, the correct gross draw is

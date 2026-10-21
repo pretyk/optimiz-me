@@ -1,4 +1,4 @@
-# Optimiz.me — Master Prompt & Technical Design Document (PRD)
+# Retirator — Master Prompt & Technical Design Document (PRD)
 
 > Subsequent user-directed revision (20 October 2026): remove quick profiles,
 > add an in-memory entry agreement, Hebrew privacy/disclaimer information pages,
@@ -23,7 +23,7 @@
 > **Instructions:** Copy the block below and paste it directly into your AI coding assistant (e.g., Cursor, Claude, ChatGPT, or Windsurf) to generate the complete application from scratch.
 
 ```text
-Act as an Expert Frontend Architect and Financial Engineer. Build a complete, production-ready, single-page React application called "Optimiz.me" — an Israeli Early Retirement (FIRE) and "Bridge Phase" Simulator.
+Act as an Expert Frontend Architect and Financial Engineer. Build a complete, production-ready, single-page React application called "Retirator" — an Israeli Early Retirement (FIRE) and "Bridge Phase" Simulator.
 
 ### Core Philosophy & Architecture:
 - **100% Client-Side & Anonymous:** Zero backend, zero telemetry. Prominently display a privacy badge in Hebrew confirming no data leaves the browser ("100% אנונימי - הנתונים מחושבים בדפדפן שלך בלבד").
@@ -88,7 +88,7 @@ Use Lucide-React icons, Tailwind CSS, and keep all code self-contained in a sing
 ## Part 2: Product Requirements & Technical Design Document (PRD)
 
 ### 1. Product Vision & Overview
-*   **Application Name:** Optimiz.me
+*   **Application Name:** Retirator
 *   **Purpose:** An advanced, interactive financial sandbox designed for planning early retirement (FIRE) in Israel. The core focus is solving and optimizing the **"Bridge Phase"**—the critical gap between the day a person stops working and the statutory age at which they can draw a tax-exempt pension annuity under Israeli law.
 *   **Target Audience:** Financially savvy Israelis, tech professionals, and early retirement planners who want granular control over their drawdown mathematics, capital preservation goals, and tax brackets.
 *   **Unique Selling Propositions (USPs):**
