@@ -108,16 +108,42 @@ for (const [name, device] of [['default phone', {}], ['small 360px phone', SMALL
       const count = await buttons.count();
       expect(count).toBeGreaterThan(5);
       const viewport = page.viewportSize();
+      const dock = page.locator('.calculate-dock');
+      const expectInside = async (tooltip) => {
+        const box = await tooltip.boundingBox();
+        const dockBox = await dock.boundingBox();
+        const dockTop = dockBox.y + dockBox.height >= viewport.height - 1 ? dockBox.y : viewport.height;
+        expect(box.x).toBeGreaterThanOrEqual(0);
+        expect(box.x + box.width).toBeLessThanOrEqual(viewport.width);
+        expect(box.y).toBeGreaterThanOrEqual(0);
+        expect(box.y + box.height).toBeLessThanOrEqual(Math.min(viewport.height, dockTop) + 1);
+      };
       for (let index = 0; index < count; index += 1) {
         const button = buttons.nth(index);
         await button.scrollIntoViewIfNeeded();
         await button.tap();
         const tooltip = page.locator(`#${await button.getAttribute('aria-describedby')}`);
         await expect(tooltip).toBeVisible();
-        const box = await tooltip.boundingBox();
-        expect(box.x).toBeGreaterThanOrEqual(0);
-        expect(box.x + box.width).toBeLessThanOrEqual(viewport.width);
+        await expectInside(tooltip);
       }
+
+      for (const index of [Math.floor(count / 2)]) {
+        const button = buttons.nth(index);
+        await page.locator('h1').tap();
+        await button.scrollIntoViewIfNeeded();
+        const dockBox = await dock.boundingBox();
+        const dockTop = dockBox.y + dockBox.height >= viewport.height - 1 ? dockBox.y : viewport.height;
+        const buttonTop = (await button.boundingBox()).y;
+        await page.evaluate((delta) => window.scrollBy(0, delta), buttonTop - (dockTop - 60));
+        await button.tap();
+        const tooltip = page.locator(`#${await button.getAttribute('aria-describedby')}`);
+        await expect(tooltip).toBeVisible();
+        await expect(tooltip).toHaveClass(/tooltip-above/);
+        await expectInside(tooltip);
+      }
+
+      const padding = await page.evaluate(() => parseFloat(getComputedStyle(document.documentElement).scrollPaddingBottom));
+      expect(padding).toBeGreaterThan((await dock.boundingBox()).height);
     });
 
     test('number fields and steppers work by touch', async ({ page }) => {
