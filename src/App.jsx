@@ -127,7 +127,7 @@ function Tooltip({ text }) {
     const below = limit - (anchorTop + 36);
     setAbove(tip.offsetHeight > below && anchorTop - 8 > below);
   };
-  return <span className="tooltip-wrap" onFocus={place}><button type="button" className="info-button" aria-label="מידע נוסף" aria-describedby={id}><Info size={14} /></button><span ref={tipRef} role="tooltip" id={id} className={`tooltip${above ? ' tooltip-above' : ''}`}>{text}</span></span>;
+  return <span className="tooltip-wrap" onFocus={place} onMouseEnter={place}><button type="button" className="info-button" aria-label="מידע נוסף" aria-describedby={id} onClick={(event) => event.currentTarget.focus()}><Info size={14} /></button><span ref={tipRef} role="tooltip" id={id} className={`tooltip${above ? ' tooltip-above' : ''}`}>{text}</span></span>;
 }
 
 function NumericField({ name, label, value, min = 0, max = CAPITAL_MAX, step = 10000, unit = '₪', info, onChange, onValidity, children }) {

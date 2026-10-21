@@ -141,15 +141,18 @@ for (const [name, device] of [['default phone', {}], ['small 360px phone', SMALL
         await expectInside(tooltip);
       }
 
-      for (const index of [Math.floor(count / 2)]) {
-        const button = buttons.nth(index);
+      for (const safariLike of [false, true]) {
+        const button = buttons.nth(Math.floor(count / 2));
         await page.locator('h1').tap();
         await button.scrollIntoViewIfNeeded();
         const dockBox = await dock.boundingBox();
         const dockTop = dockBox.y + dockBox.height >= viewport.height - 1 ? dockBox.y : viewport.height;
         const buttonTop = (await button.boundingBox()).y;
         await page.evaluate((delta) => window.scrollBy(0, delta), buttonTop - (dockTop - 60));
-        await button.tap();
+        // iOS Safari fires click on tap without focusing the button.
+        if (safariLike) await button.dispatchEvent('click');
+        else await button.tap();
+        await expect(button).toBeFocused();
         const tooltip = page.locator(`#${await button.getAttribute('aria-describedby')}`);
         await expect(tooltip).toBeVisible();
         await expect(tooltip).toHaveClass(/tooltip-above/);
