@@ -212,3 +212,17 @@ the same checks and retains browser artifacts on failure.
 
 The production app makes no third-party requests. npm and browser installation
 do require network access during development.
+
+## Contributing with AI agents
+
+Rules for every contributor, human or AI, are in [`AGENTS.md`](AGENTS.md).
+The repository also includes custom agents in [`.github/agents`](.github/agents)
+and skills in [`.github/skills`](.github/skills):
+
+- `code-reviewer`: reviews every PR for bugs, regressions, and missing tests.
+- `finance-reviewer`: checks the formulas and the Israeli tax and pension assumptions.
+- `rtl-ux-reviewer`: checks Hebrew copy, RTL layout, mobile, and accessibility.
+- `privacy-guard`: blocks tracking, storage, network calls, and weaker headers.
+- Skills: `code-review-checklist`, `israeli-retirement-rules`,
+  `hebrew-copy-style`, and `azure-static-web-apps-deploy` (planned Azure
+  Static Web Apps CI/CD).
