@@ -96,7 +96,8 @@ npm run build
 npm run preview
 ```
 
-Deploy `dist` to any static HTTPS host. No environment variables or server are
+The live site is hosted on Azure Static Web Apps (see [Deployment](#deployment)).
+`dist` also works on any static HTTPS host. No environment variables or server are
 required. For subdirectory hosting, set Vite's `base` to the deployment path.
 Production HTML includes a self-only asset content policy and disables outgoing
 connections. It is omitted in development to allow Vite's local hot-reload
@@ -213,6 +214,56 @@ the same checks and retains browser artifacts on failure.
 The production app makes no third-party requests. npm and browser installation
 do require network access during development.
 
+## Deployment
+
+Production: https://nice-pebble-0150fe203.2.azurestaticapps.net
+
+The site runs on the **Azure Static Web Apps Free tier**, with no API, no
+authentication, and no Application Insights.
+[`.github/workflows/ci-cd.yml`](.github/workflows/ci-cd.yml) deploys it:
+
+1. Every PR and every push to `main` runs `npm run check`. A push to `main`
+   keeps the tested `dist` folder as an artifact.
+2. After the checks pass on `main`, the deploy job uploads those exact files to
+   production. The GitHub `production` environment accepts deployments from
+   `main` only.
+3. There are no PR preview environments. A Static Web App has a single
+   deployment token, and that token can also deploy to production, so only
+   `main` may obtain it. Verify PRs locally with `npm run build && npm run preview`.
+
+GitHub signs in to Azure with OIDC through a user-assigned managed identity. Its
+only federated credential trusts the `production` environment. No Azure secret
+is stored in GitHub. The identity has a custom role that can only read the
+Static Web App and its deployment token. The workflow fetches the token at run
+time and masks it.
+
+[`public/staticwebapp.config.json`](public/staticwebapp.config.json) serves the
+production CSP (`connect-src 'none'`, `frame-ancestors 'none'`) and the
+privacy headers as real HTTP headers. It also returns 404 for the built-in
+`/.auth/*` routes. `tests/deploy-config.test.js` keeps the header CSP in sync
+with the build-time CSP in `vite.config.js`.
+
+### Infrastructure
+
+The infrastructure is Bicep in [`infra/`](infra), deployed at subscription scope:
+
+```sh
+az deployment sub create -l westeurope -n retirator-infra -f infra/main.bicep
+```
+
+It creates the `rg-retirator` resource group, the `swa-retirator` Static Web
+App (Free tier, staging environments disabled), the `id-retirator-github`
+managed identity with a federated credential for the `production` GitHub
+environment, and the custom deployer role. Bicep runs in incremental mode,
+so removing a resource from the template does not delete it in Azure; delete
+it manually. The workflow reads the repository variables `AZURE_CLIENT_ID`,
+`AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`, `AZURE_RESOURCE_GROUP`, and
+`AZURE_STATIC_WEB_APP_NAME`; none of them are secrets.
+
+If the deployment token may have been exposed, reset it with
+`az staticwebapp secrets reset-api-key -n swa-retirator -g rg-retirator`.
+Never deploy manually; every release goes through CI.
+
 ## Contributing with AI agents
 
 Rules for every contributor, human or AI, are in [`AGENTS.md`](AGENTS.md).
@@ -224,5 +275,5 @@ and skills in [`.github/skills`](.github/skills):
 - `rtl-ux-reviewer`: checks Hebrew copy, RTL layout, mobile, and accessibility.
 - `privacy-guard`: blocks tracking, storage, network calls, and weaker headers.
 - Skills: `code-review-checklist`, `israeli-retirement-rules`,
-  `hebrew-copy-style`, and `azure-static-web-apps-deploy` (planned Azure
-  Static Web Apps CI/CD).
+  `hebrew-copy-style`, and `azure-static-web-apps-deploy` (Azure Static Web
+  Apps hosting and CI/CD).

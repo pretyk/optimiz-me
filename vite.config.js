@@ -2,6 +2,8 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 
+export const CONTENT_SECURITY_POLICY = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'";
+
 export default defineConfig({
   plugins: [
     react(),
@@ -14,7 +16,7 @@ export default defineConfig({
           tag: 'meta',
           attrs: {
             'http-equiv': 'Content-Security-Policy',
-            content: "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'",
+            content: CONTENT_SECURITY_POLICY,
           },
           injectTo: 'head-prepend',
         }];

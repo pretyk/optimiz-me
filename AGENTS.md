@@ -15,7 +15,7 @@ Retirator is a Hebrew, RTL, 100% client-side Israeli FIRE and bridge-phase simul
 
 - Run `npm run check` (unit tests, build, Playwright e2e on desktop and mobile) before opening or updating a PR.
 - Copilot code review runs automatically on every PR and push (repository ruleset); its instructions are in `.github/copilot-instructions.md`. Resolve its blocking comments before merging.
-- Use a branch and a PR for every change. Production deployment to Azure Static Web Apps is planned to run only through CI from `main`; once it exists, never deploy manually.
+- Use a branch and a PR for every change. Production deploys to Azure Static Web Apps only through CI (`.github/workflows/ci-cd.yml`) from `main`; never deploy manually. There are no PR previews; never add an Azure trust for any GitHub subject other than the `production` environment.
 - Commit messages are imperative and describe the user-visible change.
 
 ## Project agents and skills
