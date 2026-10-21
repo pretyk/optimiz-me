@@ -5,8 +5,8 @@ param location string = 'westeurope'
 
 param resourceGroupName string = 'rg-retirator'
 
-@description('GitHub repository allowed to deploy, as owner/name.')
-param githubRepository string = 'pretyk/retirator'
+@description('GitHub OIDC immutable subject prefix, as owner@ownerId/name@repoId. Get it from: gh api repos/OWNER/REPO/actions/oidc/customization/sub')
+param githubSubjectRepository string = 'pretyk@4295591/retirator@1427245824'
 
 resource rg 'Microsoft.Resources/resourceGroups@2024-03-01' = {
   name: resourceGroupName
@@ -39,7 +39,7 @@ module app 'app.bicep' = {
   name: 'retirator-app'
   params: {
     location: location
-    githubRepository: githubRepository
+    githubSubjectRepository: githubSubjectRepository
     deployerRoleId: deployerRole.id
   }
 }

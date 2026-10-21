@@ -1,5 +1,5 @@
 param location string
-param githubRepository string
+param githubSubjectRepository string
 param deployerRoleId string
 
 resource site 'Microsoft.Web/staticSites@2024-04-01' = {
@@ -29,7 +29,7 @@ resource productionCredential 'Microsoft.ManagedIdentity/userAssignedIdentities/
   name: 'github-production'
   properties: {
     issuer: 'https://token.actions.githubusercontent.com'
-    subject: 'repo:${githubRepository}:environment:production'
+    subject: 'repo:${githubSubjectRepository}:environment:production'
     audiences: ['api://AzureADTokenExchange']
   }
 }

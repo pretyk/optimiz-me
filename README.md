@@ -240,7 +240,7 @@ time and masks it.
 [`public/staticwebapp.config.json`](public/staticwebapp.config.json) serves the
 production CSP (`connect-src 'none'`, `frame-ancestors 'none'`) and the
 privacy headers as real HTTP headers. It also returns 404 for the built-in
-`/.auth/*` routes. `tests/deploy-config.test.js` keeps the header CSP in sync
+sign-in routes (`/.auth/login/github`, `aad`, and `twitter`). `tests/deploy-config.test.js` keeps the header CSP in sync
 with the build-time CSP in `vite.config.js`.
 
 ### Infrastructure
