@@ -18,9 +18,9 @@ description: How Optimiz.me is hosted on Azure Static Web Apps and deployed by G
 
 ## `staticwebapp.config.json`
 
-Serve the security headers as real HTTP headers, matching the build-time CSP:
+Serve the security headers as real HTTP headers. Browsers enforce both a header CSP and the build-time meta CSP, so the header must copy the full policy from `vite.config.js` and only add header-only directives:
 
-- `Content-Security-Policy` with `default-src 'self'`, `connect-src 'none'`, `object-src 'none'`, `base-uri 'none'`, `frame-ancestors 'none'`.
+- `Content-Security-Policy`: `default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-ancestors 'none'`. The app needs `'unsafe-inline'` styles and `data:` images.
 - `Referrer-Policy: no-referrer`, `X-Content-Type-Options: nosniff`, `Permissions-Policy` denying camera, microphone, geolocation, and interest-cohort.
 - `navigationFallback` to `/index.html`. The app uses hash routes, so no other rewrites are needed.
 
