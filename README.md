@@ -207,6 +207,13 @@ declining, keyboard focus, both legal pages, direct-link refresh, browser histor
 draft preservation, acceptance reset, absence of storage or data requests,
 GitHub link attributes, and accessibility before acceptance.
 
+`tests/e2e/mobile.spec.js` runs on a Pixel 7 and on a small 360px phone. It
+checks for no horizontal overflow on every page, touch targets of at least 44×44px,
+16px inputs (no iOS zoom on focus), text of at least 11px, the sticky
+calculate bar and its draft preview, scrolling to the results after
+calculating, tap-to-open tooltips that stay on screen, touch steppers, tapping
+the chart, dialogs that fit the screen, and axe accessibility.
+
 `npm run test:e2e` expects a current `dist` build and a free port 4173.
 Use `npx playwright show-report` to inspect the report. GitHub Actions runs
 the same checks and retains browser artifacts on failure.
