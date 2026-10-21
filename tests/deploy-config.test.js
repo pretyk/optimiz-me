@@ -18,7 +18,9 @@ describe('Azure Static Web Apps config', () => {
   });
 
   test('disables built-in auth routes and adds no backend', () => {
-    expect(config.routes).toContainEqual({ route: '/.auth/*', statusCode: 404 });
+    for (const provider of ['github', 'aad', 'twitter']) {
+      expect(config.routes).toContainEqual({ route: `/.auth/login/${provider}`, statusCode: 404 });
+    }
     expect(config).not.toHaveProperty('auth');
     expect(config).not.toHaveProperty('platform');
     expect(config.navigationFallback.rewrite).toBe('/index.html');
