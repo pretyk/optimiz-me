@@ -101,6 +101,20 @@ for (const [name, device] of [['default phone', {}], ['small 360px phone', SMALL
       await expect(page.getByText('התרחיש שלך מעודכן')).toBeVisible();
     });
 
+    test('dock previews a new bridge after a scenario with no bridge period', async ({ page }) => {
+      await page.goto('/');
+      await acceptDisclaimer(page);
+      const stopAge = page.getByRole('textbox', { name: 'גיל הפסקת עבודה - תחילת גישור', exact: true });
+      await stopAge.fill('67');
+      await commit(page).tap();
+      await stopAge.fill('60');
+      const preview = page.getByTestId('dock-preview');
+      await expect(preview).toBeVisible();
+      await expect(preview).toContainText('₪');
+      await expect(preview.locator('.delta')).toHaveCount(0);
+      await expect(preview).not.toContainText(/NaN|Infinity/);
+    });
+
     test('field tooltips open on tap and stay inside the screen', async ({ page }) => {
       await page.goto('/');
       await acceptDisclaimer(page);
