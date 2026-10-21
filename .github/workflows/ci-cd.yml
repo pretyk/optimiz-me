@@ -5,6 +5,11 @@ on:
   pull_request:
 permissions:
   contents: read
+# Whole runs queue in push order on main, so a newer pending run always replaces an older one,
+# and an older commit can never deploy after a newer one. PR runs cancel superseded pushes.
+concurrency:
+  group: ci-cd-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -44,14 +49,11 @@ jobs:
     environment:
       name: production
       url: ${{ steps.deploy.outputs.static_web_app_url }}
-    concurrency:
-      group: deploy-production
-      cancel-in-progress: false
     permissions:
       contents: read
       id-token: write
     steps:
-      # Runs after acquiring the deploy lock, so a late older run cannot overwrite a newer release.
+      # Backstop: if main moved while this run was testing, let the newer queued run deploy.
       - id: latest
         name: Skip superseded commits
         env:
