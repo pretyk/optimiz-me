@@ -74,6 +74,27 @@ describe('pension and tax scenario assumptions', () => {
 });
 
 describe('validation and trajectories', () => {
+  it.each(['liquidSavings', 'hishtalmut'])('caps %s at 10 million inclusive', (key) => {
+    for (const value of [0, 9999999.99, 10000000]) {
+      const state = { ...DEFAULT_STATE, [key]: value };
+      expect(validateState(state)).toEqual([]);
+      expect(calculate(state).valid).toBe(true);
+    }
+    for (const value of [10000000.01, 10000001, 100000000]) {
+      const state = { ...DEFAULT_STATE, [key]: value };
+      expect(validateState(state).length).toBeGreaterThan(0);
+      expect(calculate(state).valid).toBe(false);
+    }
+  });
+  it('allows both liquid assets at their individual maximum', () => {
+    expect(calculate({ ...DEFAULT_STATE, liquidSavings: 10000000, hishtalmut: 10000000 }))
+      .toMatchObject({ valid: true, startingCapital: 20000000 });
+  });
+  it.each(['targetCapital', 'pensionBalance'])('retains the 100 million maximum for %s', (key) => {
+    expect(validateState({ ...DEFAULT_STATE, [key]: 100000000 })).toEqual([]);
+    expect(calculate({ ...DEFAULT_STATE, [key]: 100000000 }).valid).toBe(true);
+    expect(validateState({ ...DEFAULT_STATE, [key]: 100000000.01 }).length).toBeGreaterThan(0);
+  });
   it.each([
     { pensionAge: 50 }, { bridgeStartAge: 49 }, { currentAge: NaN }, { liquidSavings: -1 },
     { annualReturn: Infinity }, { currentAge: 50.5 }, { gender: 'unknown' },

@@ -93,6 +93,50 @@ test('blocks malformed amounts and invalid timelines with explicit Hebrew errors
   await expect(commit(page)).toBeEnabled();
 });
 
+for (const label of ['חיסכון נזיל / תיק השקעות', 'קרן השתלמות']) {
+  test(`caps ${label} at 10 million across text, stepper and slider controls`, async ({ page }) => {
+    const input = field(page, label);
+    const slider = page.getByRole('slider', { name: `${label} - מחוון`, exact: true });
+    const increase = page.getByRole('button', { name: `הגדל ${label}`, exact: true });
+    const before = await page.getByTestId('bridge-net').textContent();
+    await expect(slider).toHaveAttribute('max', '10000000');
+    for (const value of ['10,000,000.01', '10000001']) {
+      await input.fill(value);
+      await expect(input).toHaveAttribute('aria-invalid', 'true');
+      await expect(page.getByRole('alert').filter({ hasText: 'יש להזין מספר בין 0 ל־10,000,000' })).toBeVisible();
+      await expect(commit(page)).toBeDisabled();
+      await expect(page.getByTestId('bridge-net')).toHaveText(before);
+    }
+    await input.fill('10,000,000');
+    await expect(input).toHaveAttribute('aria-invalid', 'false');
+    await expect(commit(page)).toBeEnabled();
+    await expect(increase).toBeDisabled();
+    await expect(slider).toHaveValue('10000000');
+    await input.fill('9,999,999.99');
+    await increase.click();
+    await expect(input).toHaveValue('10,000,000');
+    await expect(increase).toBeDisabled();
+    await page.getByRole('button', { name: `הקטן ${label}`, exact: true }).click();
+    await expect(input).toHaveValue('9,990,000');
+    await slider.focus();
+    await page.keyboard.press('End');
+    await expect(input).toHaveValue('10,000,000');
+    await expect(increase).toBeDisabled();
+    await commit(page).click();
+    await expect(page.getByTestId('bridge-net')).not.toHaveText(before);
+  });
+}
+
+test('retains 100 million limits for target capital and pension balance', async ({ page }) => {
+  for (const label of ['יעד הון להשאיר בגיל פנסיה', 'צבירה נוכחית בקרן הפנסיה']) {
+    await expect(page.getByRole('slider', { name: `${label} - מחוון`, exact: true })).toHaveAttribute('max', '100000000');
+    await field(page, label).fill('100,000,000');
+    await expect(field(page, label)).toHaveAttribute('aria-invalid', 'false');
+    await expect(page.getByRole('button', { name: `הגדל ${label}`, exact: true })).toBeDisabled();
+  }
+  await expect(commit(page)).toBeEnabled();
+});
+
 test('same-age retirement has no bridge and stays finite', async ({ page }) => {
   await field(page, 'גיל הפסקת עבודה - תחילת גישור').fill('67');
   await commit(page).click();
