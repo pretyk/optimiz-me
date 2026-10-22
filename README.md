@@ -113,11 +113,12 @@ excluded. No server-side consent evidence is collected or retained.
 
 Requires Node.js 22.12+ in the 22.x line, 24.x (recommended), or 26+, and npm.
 
-**Dependency portability is not yet resolved:** the committed lockfile still
-references a Microsoft package feed. The portability regression checks fail
-until exact public package versions and tarball integrity can be verified.
-Complete that migration and a credential-free clean install on personal equipment;
-do not bypass managed-device package protections or silently change locked versions.
+The committed lockfile uses verified public npm tarballs and SHA-512 integrity.
+The migration preserves every locked version and the dependency graph. GitHub
+Actions selects `https://registry.npmjs.org/` through its test-job environment,
+without registry credentials. There is no project registry override: local npm
+configuration, including an organization-approved package feed, remains unchanged.
+Do not bypass managed-device package protections or silently change locked versions.
 
 ```sh
 npm ci

@@ -41,43 +41,6 @@ jobs:
             test-results/
           retention-days: 7
 
-  verify-public-lock:
-    if: github.event_name == 'pull_request' && github.head_ref == 'pretyk-portable-dependencies-and-wording'
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    env:
-      NPM_CONFIG_REGISTRY: https://registry.npmjs.org/
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          persist-credentials: false
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 24
-      - id: verify
-        name: Verify exact public versions and downloaded tarball integrity
-        run: node .github/scripts/verify-public-lock.mjs
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: public-lock-verification
-          path: public-lock-verification.json
-          if-no-files-found: warn
-          retention-days: 7
-      - uses: actions/upload-artifact@v4
-        if: steps.verify.outcome == 'success'
-        with:
-          name: verified-public-lockfile
-          path: package-lock.json
-          if-no-files-found: error
-          retention-days: 7
-      - name: Clean public install without registry credentials or cached packages
-        env:
-          NPM_CONFIG_CACHE: ${{ runner.temp }}/clean-public-npm-cache
-        run: npm ci --no-audit --no-fund
-      - run: npx playwright install --with-deps chromium
-      - run: npm run check
-
   # Production only. The `production` environment accepts only main, and it is the only
   # GitHub subject Azure trusts. There are no PR previews, because the SWA token can deploy to production.
   deploy:
