@@ -59,6 +59,28 @@ describe('monthly end-of-period drawdown', () => {
 });
 
 describe('pension and tax scenario assumptions', () => {
+  it.each([['male', 67], ['female', 65]])('uses neutral retirement wording for %s at age %i', (gender, age) => {
+    expect(taxStatus(gender, age)).toMatchObject({
+      title: 'תרחיש בגיל פרישה — מס משוער',
+      text: 'המס מוצג לפי הנחות המודל; הזכאות לפטור תלויה בנתונים אישיים ובדין.',
+    });
+  });
+  it('describes early scenarios without asserting legal tax rates or pension eligibility', () => {
+    expect(taxStatus('male', 59)).toMatchObject({
+      title: 'תרחיש אזהרה — מתחת לגיל 60',
+      text: 'תרחיש להמחשה בלבד — לא קצבה זמינה ולא חישוב מס לפי הדין.',
+    });
+    expect(taxStatus('male', 60)).toMatchObject({
+      title: 'תרחיש מגיל 60 עד גיל פרישה — מס משוער',
+      text: 'המס מוצג לפי הנחות המודל, ולא כחישוב מס או זכאות אישיים.',
+    });
+  });
+  it.each(['male', 'female'])('never promises optimal withdrawal or automatic exemption for %s', (gender) => {
+    for (let age = 50; age <= 75; age++) {
+      const { title, text } = taxStatus(gender, age);
+      expect(`${title} ${text}`).not.toMatch(/אופטימלי|פטור ממס \(קיבוע זכויות\)|שלא כדין|קנס שבירה|מס שולי גבוה/);
+    }
+  });
   it.each([
     ['male', 59, 'danger', 0.35], ['male', 60, 'warning', 0.2], ['male', 66, 'warning', 0.2],
     ['male', 67, 'success', 0.05], ['female', 64, 'warning', 0.2], ['female', 65, 'success', 0.05],

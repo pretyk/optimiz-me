@@ -48,11 +48,41 @@ test('updates pension tax alert immediately from slider in all tax bands', async
   await setSlider(page, 'גיל משיכת פנסיה', 59);
   await expect(page.getByTestId('tax-alert')).toHaveClass(/danger/);
   await expect(page.getByTestId('tax-alert')).toContainText('35%');
+  await expect(page.getByTestId('tax-alert')).toContainText('תרחיש אזהרה — מתחת לגיל 60');
+  await expect(page.getByTestId('tax-alert')).toContainText('לא קצבה זמינה ולא חישוב מס לפי הדין');
   await setSlider(page, 'גיל משיכת פנסיה', 60);
   await expect(page.getByTestId('tax-alert')).toHaveClass(/warning/);
+  await expect(page.getByTestId('tax-alert')).toContainText('הפחתה להמחשה: 20%');
   await setSlider(page, 'גיל משיכת פנסיה', 67);
   await expect(page.getByTestId('tax-alert')).toHaveClass(/success/);
+  await expect(page.getByTestId('tax-alert')).toContainText('תרחיש בגיל פרישה — מס משוער');
+  await expect(page.getByTestId('tax-alert')).toContainText('המס מוצג לפי הנחות המודל; הזכאות לפטור תלויה בנתונים אישיים ובדין.');
+  await expect(page.getByTestId('tax-alert')).toContainText('הפחתה להמחשה: 5%');
+  await expect(page.getByTestId('tax-alert')).toContainText('לא שיעור מס בפועל ולא קביעת זכאות לקצבה');
   await expect(page.getByTestId('pension-net')).toHaveText(pension);
+});
+
+test('keeps illustrative pension wording committed and excludes superseded claims', async ({ page }) => {
+  const card = page.locator('.pension-card');
+  for (const age of [59, 60, 67]) {
+    await setSlider(page, 'גיל משיכת פנסיה', age);
+    await commit(page).click();
+    await expect(card).toContainText(`הפחתה להמחשה: ${age < 60 ? 35 : age < 67 ? 20 : 5}%`);
+    await expect(card).toContainText('לא שיעור מס בפועל');
+    await expect(page.locator('body')).not.toContainText('משיכה אופטימלית בגיל פרישה חוקי');
+    await expect(page.locator('body')).not.toContainText('פטור ממס (קיבוע זכויות)');
+    await expect(page.locator('body')).not.toContainText('קנס מינימום');
+    if (age < 60) {
+      await expect(card).toContainText('סכום חודשי להמחשה — לא קצבה זמינה');
+      await expect(card).not.toContainText('קצבה חודשית נטו משוערת');
+    } else {
+      await expect(card).toContainText('קיבוע זכויות הוא הליך לקביעת פטור אישי');
+      await expect(card).toContainText('אינו מבטיח פטור אוטומטי או מלא');
+    }
+  }
+  await setSlider(page, 'גיל משיכת פנסיה', 59);
+  await expect(card).toContainText('הפחתה להמחשה: 5%');
+  await expect(card).toContainText('קצבה חודשית נטו משוערת');
 });
 
 test('uses female threshold live without changing locked results', async ({ page }) => {
