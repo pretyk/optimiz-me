@@ -101,7 +101,8 @@ test('shows the headline without the intro tagline or profile selectors', async 
   await expect(page.locator('.profiles-bar')).toHaveCount(0);
 });
 
-test('rotates every punchline by keyboard without repeating or changing the scenario', async ({ page }) => {
+test('rotates every punchline by keyboard without repeating or changing the scenario', async ({ page, isMobile }) => {
+  if (isMobile) await page.setViewportSize({ width: 320, height: 740 });
   await page.addInitScript(() => { Math.random = () => 0; });
   await page.reload();
   await acceptDisclaimer(page);
@@ -118,6 +119,18 @@ test('rotates every punchline by keyboard without repeating or changing the scen
     'הגיע הזמן לעדכון גרסה. פחות משרד, יותר מרפסת.',
     'אפשר לצאת לפנסיה, לפני שהסיסמה שוב פגה?',
     'החלום: יום ראשון שמרגיש כמו שבת.',
+    'מצאתי באג בשגרה. יש בה יותר מדי עבודה.',
+    'הענן מגבה הכול. מי מגבה את השנ״צ?',
+    'אפשר לעבוד מכל מקום. אפשר גם משום מקום?',
+    'הפגישה יכלה להיות מייל. והמייל יכל להיות תנומה.',
+    'יש לי חלון ביומן. רואים ממנו את הים.',
+    'המשימה הבאה בלוח: לרדת מהערסל. אולי.',
+    'המחשב נכנס למצב שינה. סוף סוף מודל לחיקוי.',
+    'ניסיתי לכבות ולהדליק. אפשר להשאיר את המשרד כבוי?',
+    'הדרישה היחידה לתפקיד: לדעת איפה הכפכפים.',
+    'פרשתי ממרוץ העכברים. החתול אישר את הבקשה.',
+    'מחר יום עמוס. קפה, ים, ואז התאוששות.',
+    'יצאתי להפסקה קצרה. נדבר בעוד עשור.',
   ];
   const before = await page.getByTestId('bridge-net').textContent();
   await field(page, 'חיסכון נזיל / תיק השקעות').fill('2,800,000');
@@ -141,9 +154,9 @@ test('randomizes the initial punchline and avoids repeats at the upper random bo
   await page.reload();
   await acceptDisclaimer(page);
   const heading = page.getByRole('heading', { level: 1 });
-  await expect(heading).toHaveText('החלום: יום ראשון שמרגיש כמו שבת.');
+  await expect(heading).toHaveText('יצאתי להפסקה קצרה. נדבר בעוד עשור.');
   await page.getByRole('button', { name: 'רוצים סיבה טובה יותר?', exact: true }).click();
-  await expect(heading).toHaveText('אפשר לצאת לפנסיה, לפני שהסיסמה שוב פגה?');
+  await expect(heading).toHaveText('מחר יום עמוס. קפה, ים, ואז התאוששות.');
 });
 
 test('steppers and range update both paired controls with formatted amounts', async ({ page }) => {
