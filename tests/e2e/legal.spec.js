@@ -19,6 +19,9 @@ test('entry requires affirmative agreement and cannot be dismissed by Escape or 
   await expect(page.locator('#main')).toHaveAttribute('inert', '');
   await expect(page.locator('#main .calculate-button').click({ trial: true, timeout: 750 })).rejects.toThrow();
   await expect(gate(page)).toContainText('השוק, האינפלציה, הריבית וחוקי המס והפנסיה');
+  await expect(gate(page)).toContainText('זהו אתר סטטי. הנתונים שהוזנו אינם נשלחים לשרת.');
+  await expect(gate(page)).toContainText('אנונימיות היא במאמץ סביר בלבד');
+  await expect(gate(page)).toContainText('ספקי אינטרנט וענן עשויים לתעד');
   const backdrop = await gate(page).evaluate((element) => getComputedStyle(element, '::backdrop').backdropFilter);
   expect(backdrop).toMatch(/blur\(/);
   await page.keyboard.press('Escape');
@@ -81,7 +84,7 @@ test('privacy is accessible before agreement and explains hosting and external-l
   await expect(page).toHaveURL(/#privacy$/);
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('המידע שלך נשאר אצלך');
   await expect(page.getByRole('heading', { name: 'בלי מעקב ובלי פרופיל משתמש' })).toBeVisible();
-  await expect(page.getByText(/ספק האחסון, תשתית ההפצה או ספק הרשת/)).toBeVisible();
+  await expect(page.getByText(/ספק האינטרנט וספקי הענן, האחסון וההפצה/)).toBeVisible();
   await expect(page.getByText(/שירות חיצוני בעל מדיניות פרטיות משלו/)).toBeVisible();
   await page.getByRole('link', { name: 'חזרה לסימולטור', exact: true }).first().click();
   await expect(gate(page)).toBeVisible();
@@ -111,6 +114,14 @@ for (const route of ['privacy', 'disclaimer']) {
     await page.goto(`/#${route}`);
     await expect(gate(page)).toHaveCount(0);
     await expect(page.getByRole('heading', { level: 1 })).toBeFocused();
+    await expect(page.getByRole('heading', { name: 'אתר סטטי — הנתונים שהוזנו אינם נשלחים לשרת' })).toBeVisible();
+    await expect(page.getByText(/טעינת העמוד וקובצי היישום מחייבת בקשות רשת/)).toBeVisible();
+    await expect(page.getByText(/היישום אינו שולח לשרת או לצד שלישי אף אחד מהנתונים שהוזנו/)).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'אנונימיות במאמץ סביר — לא הבטחה מוחלטת' })).toBeVisible();
+    await expect(page.getByText(/ספק האינטרנט וספקי הענן, האחסון וההפצה/)).toContainText('למחבר האתר אין שליטה');
+    await expect(page.getByText(/ספק האינטרנט וספקי הענן, האחסון וההפצה/)).toContainText('במידה המרבית המותרת בדין');
+    await expect(page.getByText(/ספק האינטרנט וספקי הענן, האחסון וההפצה/)).toContainText('אין בכך כדי לשלול זכויות או לפטור מאחריות שלא ניתן להגביל לפי דין');
+    await expect(page.getByText('100% אנונימי', { exact: false })).toHaveCount(0);
     await page.reload();
     await expect(page).toHaveURL(new RegExp(`#${route}$`));
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
@@ -138,7 +149,9 @@ test('agreement and legal-page visits do not make data requests or write storage
   await page.getByRole('link', { name: 'פרטיות ואי־מעקב', exact: true }).click();
   await page.getByRole('link', { name: 'חזרה לסימולטור', exact: true }).first().click();
   await accept(page);
+  await page.getByRole('textbox', { name: 'חיסכון נזיל / תיק השקעות', exact: true }).fill('2,345,678');
   await page.getByRole('button', { name: 'חשב סימולציה', exact: true }).click();
+  await expect(page).toHaveURL(/\/#$/);
   expect(requests).toEqual([]);
   expect(errors).toEqual([]);
   await noStorage(page);

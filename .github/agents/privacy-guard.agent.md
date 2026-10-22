@@ -3,7 +3,10 @@ name: privacy-guard
 description: Blocks any change that could send, store, or leak user data from Retirator, including dependencies, CSP, headers, and Azure deployment config.
 ---
 
-You protect the promise "100% אנונימי - הנתונים מחושבים בדפדפן שלך בלבד".
+Protect browser-only calculation and non-transmission of entered data, not a
+promise of absolute anonymity. The site consists of static files; loading them
+requires web requests that ISPs and cloud/hosting providers may process or log.
+Keep this best-effort anonymity limitation clear without weakening app privacy.
 
 Fail the review if a change introduces any of the following:
 

@@ -6,8 +6,21 @@ functions, and custom styles live in [`src/App.jsx`](src/App.jsx).
 
 **100% client-side. No backend, analytics, accounts, cookies, storage, external
 fonts, or financial-data transmission.** Reloading resets the scenario.
-The web host still receives ordinary requests for static assets; anonymity here
-means the app neither collects nor transmits the inputs, not network anonymity.
+The entire site is served as static files. Loading the page and its assets
+requires web requests to the storage/hosting service that serves them. None of
+the entered data or calculated results is sent to a server or third party by
+the app, or included in the page URL or asset requests.
+
+**Anonymity is best effort, not a guarantee of network anonymity.** ISPs and
+cloud, hosting, or delivery providers may process, monitor, or log request
+metadata available to them under their own policies and applicable law (for
+example, network addresses and access times; the serving provider may also see
+requested resource paths and browser details). The author does not control
+these providers' activities and cannot guarantee an absence of infrastructure
+logs. To the maximum extent permitted by law, the author, maintainers, and
+contributors disclaim responsibility for those providers' processing,
+monitoring, or logging. This does not exclude rights or liability that cannot
+lawfully be excluded.
 
 ## License
 
@@ -58,6 +71,22 @@ Retirator נועד ללמידה ולהמחשת תרחישים בלבד. מחבר
 מוסמך ובעל רישיון מתאים לפי הדין, ובמידת הצורך ליועץ פנסיוני, יועץ השקעות,
 רואה חשבון, יועץ מס או עורך דין. יש לבדוק עצמאית נתונים, זכאות והוראות
 דין מול הגופים והרשויות הרלוונטיים.
+
+### אתר סטטי וגבולות האנונימיות
+
+האתר מוגש כקבצים סטטיים משירות אחסון. טעינת העמוד וקובצי היישום מחייבת
+בקשות רשת לשירות שמגיש אותם, אך כל חישובי הסימולציה מתבצעים בדפדפן בלבד.
+היישום אינו שולח לשרת או לצד שלישי אף אחד מהנתונים שהוזנו או את תוצאות
+החישוב, ואינו כולל אותם בכתובת העמוד או בבקשות הטעינה.
+
+האתר נבנה לצמצום איסוף מידע במאמץ סביר, אך אין התחייבות לאנונימיות מוחלטת
+ברשת. ספק האינטרנט וספקי הענן, האחסון וההפצה עשויים לעבד, לנטר או לתעד
+מידע על בקשות הרשת, לפי המידע הזמין לכל אחד מהם, מדיניותו והדין החל.
+מידע זה עשוי לכלול כתובת רשת, זמני גישה, ובשירות שמגיש את הקבצים גם
+כתובות משאבים ופרטי דפדפן. למחבר האתר אין שליטה על פעולות אלה או אפשרות
+להבטיח שלא יתבצעו. במידה המרבית המותרת בדין, המחבר, המתחזקים והתורמים אינם
+אחראים לעיבוד, לניטור או לתיעוד שעושים ספקים אלה. אין בכך כדי לשלול זכויות
+או לפטור מאחריות שלא ניתן להגביל לפי דין.
 
 ### הגבלת אחריות וזכויות לפי דין
 
@@ -183,6 +212,9 @@ The target capital and pension balance inputs retain their ₪100 million maximu
 The supplied document is preserved in
 [`docs/retirator_prd_and_design_doc.md`](docs/retirator_prd_and_design_doc.md).
 
+- Its absolute-anonymity badge is superseded by the privacy disclosure above:
+  entered data stays in the browser, but loading static files requires web
+  requests that infrastructure providers may log.
 - Its numerical benchmark conflicts with its formula. For PV = ₪3,000,000,
   FV = 0, N = 204, and annual return = 4%, the correct gross draw is
   **₪20,291.80465685561/month**, not ₪16,861.

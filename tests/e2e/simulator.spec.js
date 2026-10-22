@@ -21,7 +21,8 @@ test.beforeEach(async ({ page }) => { await page.goto('/'); await acceptDisclaim
 test('loads Hebrew RTL, privacy badge and complete numeric controls', async ({ page }) => {
   await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
   await expect(page.locator('html')).toHaveAttribute('lang', 'he');
-  await expect(page.getByText('100% אנונימי - הנתונים מחושבים בדפדפן שלך בלבד')).toBeVisible();
+  await expect(page.getByText('הנתונים מחושבים בדפדפן שלך בלבד — לא נשלחים לשרת')).toBeVisible();
+  await expect(page.getByText('100% אנונימי', { exact: false })).toHaveCount(0);
   await expect(page.getByRole('slider')).toHaveCount(8);
   await expect(page.getByRole('textbox')).toHaveCount(8);
   await expect(field(page, 'חיסכון נזיל / תיק השקעות')).toHaveValue('1,800,000');
