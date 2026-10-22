@@ -11,6 +11,9 @@
 > The "רוצים סיבה טובה יותר?" button selects a different random line on demand,
 > without automatic rotation, storage, network requests, or scenario changes.
 
+> Follow-up revision (22 October 2026): retain the original ten punchlines and
+> add twelve more, for 22 total. Selection and shuffle behavior are unchanged.
+
 > Implementation notes: the original requirements below are preserved. The stated
 > PMT benchmark is incorrect: the specified formula gives ₪20,291.80465685561
 > (PV = 3,000,000, FV = 0, N = 204, annual rate = 4%), not ₪16,861.
