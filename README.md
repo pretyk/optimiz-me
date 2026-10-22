@@ -120,6 +120,9 @@ Inline styles are required by the single-file design. Do not add analytics.
   Same-page navigation preserves draft inputs and committed results.
 - Enter a custom scenario. Every numeric field has a
   comma-formatted input, plus/minus buttons, an RTL slider, and a Hebrew tooltip.
+  On phones and touch-capable tablets or laptops, sliders have a 44px-high touch
+  area separated from the number-control row by 16px of non-interactive space;
+  plus/minus buttons retain at least 44×44px touch targets.
 - Changes update **draft** values, tax alerts, and monthly delta previews.
   Results, chart, and formula-modal variables stay **committed** until clicking
   **חשב סימולציה**. Invalid inputs and timelines explicitly block that action.

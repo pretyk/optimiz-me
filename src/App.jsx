@@ -438,8 +438,7 @@ const styles = `
 .info-button{width:44px;height:44px;margin:-12px -10px;padding:0}
 .tooltip-wrap{position:static}.numeric-field,.gender-row{position:relative}.tooltip{top:36px;bottom:auto;inset-inline:0;width:auto;max-width:none;font-size:14px;pointer-events:none}.tooltip.tooltip-above{top:auto;bottom:calc(100% + 6px)}
 .gender-toggle button{min-height:44px;min-width:64px;font-size:16px;padding:0 18px}
-.number-control,.two-fields .number-control{height:54px;gap:6px;padding-inline:12px 4px}.number-control input,.two-fields .number-control input{font-size:18px;height:100%}.number-control .unit,.two-fields .number-control .unit{font-size:14px}.number-control button{min-width:44px;height:44px;border-radius:7px}
-.range{height:44px;margin:4px 0 0;padding:20px 0;background-clip:content-box!important}.range::-webkit-slider-thumb{width:26px;height:26px}.range::-moz-range-thumb{width:18px;height:18px}.range-labels{font-size:14px}
+.range-labels{font-size:14px}
 .tax-alert,.tax-alert strong{font-size:14px}.tax-alert small{font-size:14px}
 .calculate-dock{padding:12px 16px calc(12px + env(safe-area-inset-bottom))}.calculate-button,.entry-disclaimer .calculate-button{min-height:52px;font-size:16px}.calculate-dock>span{font-size:14px;margin-top:8px}
 .dock-preview{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:14px;color:#c3ccdd;margin-bottom:10px}.dock-preview b{margin-inline-start:auto;font-size:18px;color:#eef2fc;font-variant-numeric:tabular-nums}.dock-preview .delta{font-size:14px}
@@ -450,6 +449,11 @@ const styles = `
 .pension-main{grid-template-columns:1fr}.pension-detail{border:0;padding:0}.pension-detail>span,.pension-detail b,.pension-note,.pension-amount small{font-size:14px}.pension-main>div>.muted{font-size:16px}.pension-card .card-heading{flex-wrap:wrap}
 .eyebrow,.section-index,.phase-badge,.estimate-badge,.pension-title .eyebrow,.controls-header p,.field-error{font-size:14px}.section-heading h3{font-size:16px}.notice,.notice p,.notice strong{font-size:14px}.site-footer{font-size:14px}.site-footer nav a{display:inline-flex;align-items:center;min-height:44px;padding-inline:8px}
 .formula-modal p,.information-lead,.information-card section p{font-size:16px}.formula,.formula-values,.entry-disclaimer .agreement-label,.entry-links,.entry-disclaimer>small,.document-date{font-size:14px}.formula-values>div{flex-wrap:wrap}
+}
+@media(max-width:720px),(any-pointer:coarse){
+.two-fields{grid-template-columns:1fr;gap:0}
+.number-control,.two-fields .number-control{height:54px;gap:6px;padding-inline:12px 4px}.number-control input,.two-fields .number-control input{font-size:18px;height:100%}.number-control .unit,.two-fields .number-control .unit{font-size:14px}.number-control button{min-width:44px;height:44px;border-radius:7px}
+.range{height:44px;margin:16px 0 0;padding:20px 0;background-clip:content-box!important}.range::-webkit-slider-thumb{width:26px;height:26px}.range::-moz-range-thumb{width:18px;height:18px}
 }
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}.confetti{display:none}}
 `;
