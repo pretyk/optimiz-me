@@ -1,5 +1,20 @@
 # Retirator — Master Prompt & Technical Design Document (PRD)
 
+> [!WARNING]
+> **Historical PRD — superseded where noted; not current financial or legal guidance.**
+> The original requirements below are retained for historical context, not as
+> current build instructions. In particular, the absolute-anonymity promises,
+> tax-exemption / "optimal withdrawal" claims, categorical early-withdrawal
+> claims, and PMT benchmark are superseded.
+> Read the current [README model assumptions](../README.md#financial-model-and-limitations)
+> and [privacy explanation](../README.md#אתר-סטטי-וגבולות-האנונימיות).
+> Financial inputs and calculations stay in the browser; loading the page and
+> its static assets still makes requests whose metadata infrastructure providers
+> may log. Browser-only calculation is not a guarantee of network anonymity.
+> The 35%, 20%, and 5% haircuts are illustrative assumptions, not actual tax
+> rates or pension-eligibility determinations. קיבוע זכויות does not imply an
+> automatic or complete exemption in this model.
+
 > Subsequent user-directed revision (20 October 2026): remove quick profiles,
 > add an in-memory entry agreement, Hebrew privacy/disclaimer information pages,
 > a public repository contribution link, and the updated headline
@@ -24,6 +39,13 @@
 ---
 
 ## Part 1: Master Prompt (Copy & Paste for AI / LLM Builders)
+
+> **Historical / superseded instructions:** do not copy this original prompt
+> into a new implementation without the corrections above. In the preserved
+> block, "Core Philosophy & Architecture" contains the superseded "100% anonymous"
+> claim, "CRITICAL LIVE ALERT" contains the superseded exemption, optimal
+> withdrawal, and early-withdrawal claims, and the pension results refer to those
+> superseded tax brackets. The original wording follows unchanged.
 
 > **Instructions:** Copy the block below and paste it directly into your AI coding assistant (e.g., Cursor, Claude, ChatGPT, or Windsurf) to generate the complete application from scratch.
 
@@ -93,6 +115,11 @@ Use Lucide-React icons, Tailwind CSS, and keep all code self-contained in a sing
 ## Part 2: Product Requirements & Technical Design Document (PRD)
 
 ### 1. Product Vision & Overview
+
+> **Historical / superseded:** the tax-exempt pension, tax-code-awareness, and
+> zero-knowledge privacy claims below are not descriptions of current financial,
+> legal, or infrastructure guarantees. See the current README linked above.
+
 *   **Application Name:** Retirator
 *   **Purpose:** An advanced, interactive financial sandbox designed for planning early retirement (FIRE) in Israel. The core focus is solving and optimizing the **"Bridge Phase"**—the critical gap between the day a person stops working and the statutory age at which they can draw a tax-exempt pension annuity under Israeli law.
 *   **Target Audience:** Financially savvy Israelis, tech professionals, and early retirement planners who want granular control over their drawdown mathematics, capital preservation goals, and tax brackets.
@@ -104,6 +131,11 @@ Use Lucide-React icons, Tailwind CSS, and keep all code self-contained in a sing
 ---
 
 ### 2. UI/UX Design System (Dark Mode Fintech Pro)
+
+> **Historical / superseded tax labels:** the color meanings below do not establish
+> exemption or classify withdrawals as illegal. Current colors distinguish
+> illustrative scenarios only; no eligibility or legal tax calculation is made.
+
 *   **Localization & Direction:** Full Hebrew UI, strictly Right-to-Left (`dir="rtl"`).
 *   **Color Palette:**
     *   **Primary Background (Canvas):** `#0b0f19` (Deep Obsidian Navy)
@@ -133,6 +165,11 @@ To make the simulator feel engaging and deliberate, the application utilizes a d
 ### 4. Financial Engine & Mathematical Specification
 
 #### A. Input Variables
+
+> **Historical assumptions, not legal eligibility:** the tax-exempt label and
+> statutory ages below are simplified model inputs. Current limitations and
+> personal-eligibility caveats are documented in the README.
+
 *   $G$ = Gender (`male` $\rightarrow A_{official} = 67$, `female` $\rightarrow A_{official} = 65$)
 *   $A_{curr}$ = Current Age (Default: 50)
 *   $A_{bridge}$ = Stop Working / Bridge Start Age (Constraint: $A_{bridge} \ge A_{curr}$)
@@ -151,6 +188,12 @@ $$S_{hish\_start} = S_{hish} \times (1 + R_{annual})^{T_{wait}}$$
 $$PV_{bridge} = S_{liq\_start} + S_{hish\_start}$$
 
 #### C. Step 2: Bridge Phase Monthly Drawdown (The `PMT` Formula)
+
+> **Historical / superseded benchmark:** the original ₪16,861 benchmark below is
+> incorrect. For the stated inputs the implemented formula yields
+> **₪20,291.80465685561 gross per month**, as recorded in the README and numeric
+> tests. The original benchmark is retained below solely for historical context.
+
 Calculates the exact monthly gross withdrawal over the bridge duration ($N$ months) that depletes $PV_{bridge}$ down to $FV_{target}$ at age $A_{pen}$, accounting for ongoing monthly compounding $r$:
 *   $N = (A_{pen} - A_{bridge}) \times 12$
 *   $r = \frac{R_{annual}}{12}$
@@ -161,6 +204,11 @@ Calculates the exact monthly gross withdrawal over the bridge duration ($N$ mont
 *   *Verification Benchmark:* When $PV_{bridge} = 3,000,000$, $FV_{target} = 0$, $N = 17 \times 12 = 204$ months (Age 50 to 67), and $R_{annual} = 4\%$, the formula yields exactly **$16,861\text{ NIS/month}$**.
 
 #### D. Step 3: Bridge Phase Tax Optimization (Gross to Net)
+
+> **Historical / superseded framing:** "optimization" and the tax descriptions
+> below are not advice or verified legal claims. The current model retains the
+> same numerical assumptions only as an educational illustration; see the README.
+
 *   Keren Hishtalmut withdrawals are $0\%$ taxed.
 *   Liquid savings are subject to a $25\%$ real capital gains tax on the *profit portion only*. In a typical mature portfolio, the profit portion represents roughly $60\%$ of the withdrawal, resulting in an **effective blended tax rate of $15\%$** on liquid drawdowns.
 *   Proportional Taxable Ratio:
@@ -180,6 +228,14 @@ Calculates the exact monthly gross withdrawal over the bridge duration ($N$ mont
     $$Pension_{gross} = \frac{P_{final}}{Factor}$$
 
 #### F. Step 5: Live Israeli Pension Tax Brackets
+
+> **Historical / superseded table:** the "Optimal", tax-exemption, and categorical
+> withdrawal claims below must not be reused in current UI. The unchanged
+> 35%, 20%, and 5% model reductions are illustrative haircuts, not actual rates,
+> a minimum penalty, or pension eligibility. Under 60 is a warning scenario, not
+> an available pension. קיבוע זכויות does not promise automatic or full exemption.
+> Current neutral wording and limitations are in the README.
+
 Evaluated dynamically against `draftState.pensionAge` ($A_{pen}$) and `draftState.gender` ($A_{official}$):
 
 | Condition | Alert Level | Effective Tax Est. | Hebrew Alert Message Displayed Under Slider |

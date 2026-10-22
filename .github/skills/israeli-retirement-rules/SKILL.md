@@ -10,9 +10,9 @@ These are **simplified model assumptions**, not a statement of current law. Ever
 | Topic | Model value | Code |
 | --- | --- | --- |
 | Statutory retirement age | Men 67, women 65 | `taxStatus` |
-| Early pension withdrawal (under 60) | 35% haircut | `taxStatus` |
-| Pension from 60 to the statutory age | 20% haircut (marginal tax, no exemption) | `taxStatus` |
-| Pension at or after the statutory age | 5% haircut (with קיבוע זכויות) | `taxStatus` |
+| Warning scenario under 60, not an available pension | 35% illustrative haircut, not a legal tax calculation | `taxStatus` |
+| Pension scenario from 60 to the statutory age | 20% illustrative haircut, not an actual tax rate or eligibility determination | `taxStatus` |
+| Pension scenario at or after the statutory age | 5% illustrative haircut, not an automatic or complete exemption | `taxStatus` |
 | Bridge tax on liquid savings | 15% blended effective rate × the liquid share | `calculate` |
 | Keren Hishtalmut | 0% tax | `calculate` |
 | Annuity factor | 200 at 67, +4 per year earlier, −3 per year later | `calculate` |
@@ -23,6 +23,7 @@ These are **simplified model assumptions**, not a statement of current law. Ever
 
 - Capital gains tax in Israel is 25% on real gains. The 15% blended rate is a rough estimate because only part of each withdrawal is gain.
 - Marginal tax, credit points, Bituach Leumi and health tax, and the קיבוע זכויות exemption cap are not modeled precisely.
+- קיבוע זכויות concerns determining a personal exemption; the model does not determine eligibility or promise full exemption. The 35%, 20%, and 5% haircuts are unchanged scenario assumptions, not statutory rates or a minimum penalty.
 - Annuity factors vary by fund, gender, survivor options, and guaranteed periods.
 - Returns are real (after inflation) and constant.
 - Women's statutory retirement age is gradually rising toward 65; the model uses 65.

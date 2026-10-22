@@ -113,6 +113,13 @@ excluded. No server-side consent evidence is collected or retained.
 
 Requires Node.js 22.12+ in the 22.x line, 24.x (recommended), or 26+, and npm.
 
+The committed lockfile uses verified public npm tarballs and SHA-512 integrity.
+The migration preserves every locked version and the dependency graph. GitHub
+Actions selects `https://registry.npmjs.org/` through its test-job environment,
+without registry credentials. There is no project registry override: local npm
+configuration, including an organization-approved package feed, remains unchanged.
+Do not bypass managed-device package protections or silently change locked versions.
+
 ```sh
 npm ci
 npm run dev
@@ -189,9 +196,13 @@ inflation and fees, but before withdrawal taxes.
    minus 3 per later year. It is not an insurer quotation.
 5. Pension net uses **illustrative effective haircuts** of 35% before age 60,
    20% from 60 to the assumed statutory age, and 5% thereafter.
-   The pre-60 amount is a penalty illustration, **not an available monthly pension**.
-   These haircuts are not additive or actual marginal-tax calculations.
-   Tax exemption at retirement is neither automatic nor necessarily complete.
+   The pre-60 amount is a **warning scenario, not an available monthly pension**
+   or a verified legal tax calculation; 35% is not presented as a minimum penalty.
+   These haircuts are not additive, actual tax rates, or determinations of pension
+   eligibility. The retirement alert reads "תרחיש בגיל פרישה — מס משוער":
+   tax is shown under model assumptions, not as an optimal withdrawal recommendation.
+   קיבוע זכויות concerns determining a personal exemption; tax exemption at
+   retirement is neither automatic nor necessarily complete.
 6. Statutory ages are simplified as 67 for men and 65 for women. Actual women's
    retirement age depends on birth date and phased legislation. Personal
    exemptions, fixing of rights, other income, and tax credits are not modeled.
@@ -209,12 +220,19 @@ The target capital and pension balance inputs retain their ₪100 million maximu
 
 ### PRD corrections
 
-The supplied document is preserved in
+The original requirements are preserved as **historical design context, not
+current financial or legal guidance**, in
 [`docs/retirator_prd_and_design_doc.md`](docs/retirator_prd_and_design_doc.md).
+Its marked superseded sections must not be used as current implementation
+instructions. The model assumptions and privacy explanation in this README
+describe the current application.
 
 - Its absolute-anonymity badge is superseded by the privacy disclosure above:
   entered data stays in the browser, but loading static files requires web
   requests that infrastructure providers may log.
+- Its tax-exemption, "optimal withdrawal", and categorical early-withdrawal
+  claims are superseded by the illustrative scenarios above. The 35%, 20%, and
+  5% reductions are model haircuts, not verified legal rates or eligibility.
 - Its numerical benchmark conflicts with its formula. For PV = ₪3,000,000,
   FV = 0, N = 204, and annual return = 4%, the correct gross draw is
   **₪20,291.80465685561/month**, not ₪16,861.
@@ -242,6 +260,11 @@ and runtime errors. Additional tests cover explicit agreement, blocked dismissal
 declining, keyboard focus, both legal pages, direct-link refresh, browser history,
 draft preservation, acceptance reset, absence of storage or data requests,
 GitHub link attributes, and accessibility before acceptance.
+`tests/dependency-portability.test.js` also rejects Microsoft-specific feed URLs
+in the committed lockfile and requires public npm tarball URLs without embedded
+credentials and with SHA-512 integrity. Package-source migrations must verify
+the exact locked versions and downloaded tarball hashes against public npm
+metadata, without silently updating versions or regenerating the dependency graph.
 
 `tests/e2e/mobile.spec.js` runs on a Pixel 7 and on a small 360px phone. It
 checks for no horizontal overflow on every page, touch targets of at least 44×44px,
