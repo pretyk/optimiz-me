@@ -172,7 +172,8 @@ forward if needed, without silently changing pension age. An unreachable capital
 target produces a signed monthly funding shortfall, not spendable income or a
 negative tax credit. Its chart shows actual zero-withdrawal capital growth,
 not fictitious deposits. Zero balances and zero returns are supported.
-Inputs permit amounts up to ₪100 million.
+Liquid savings and Keren Hishtalmut inputs each permit amounts up to ₪10 million.
+The target capital and pension balance inputs retain their ₪100 million maximum.
 
 ### PRD corrections
 

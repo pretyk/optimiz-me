@@ -26,6 +26,7 @@ const integer = new Intl.NumberFormat('he-IL', { maximumFractionDigits: 0 });
 const money = (value) => value === null ? '—' : `₪${integer.format(value)}`;
 const compact = (value) => Math.abs(value) >= 1000000 ? `${number.format(value / 1000000)} מ׳` : `${integer.format(value / 1000)} א׳`;
 const CAPITAL_MAX = 100000000;
+const LIQUID_ASSET_MAX = 10000000;
 
 export function taxStatus(gender, age) {
   const officialAge = gender === 'female' ? 65 : 67;
@@ -36,7 +37,7 @@ export function taxStatus(gender, age) {
 
 export function validateState(s) {
   const issues = [];
-  const ranges = { currentAge: [25, 70], bridgeStartAge: [25, 70], pensionAge: [50, 75], annualReturn: [0, 10], liquidSavings: [0, CAPITAL_MAX], hishtalmut: [0, CAPITAL_MAX], targetCapital: [0, CAPITAL_MAX], pensionBalance: [0, CAPITAL_MAX] };
+  const ranges = { currentAge: [25, 70], bridgeStartAge: [25, 70], pensionAge: [50, 75], annualReturn: [0, 10], liquidSavings: [0, LIQUID_ASSET_MAX], hishtalmut: [0, LIQUID_ASSET_MAX], targetCapital: [0, CAPITAL_MAX], pensionBalance: [0, CAPITAL_MAX] };
   for (const [key, [min, max]] of Object.entries(ranges)) {
     if (!Number.isFinite(s[key]) || s[key] < min || s[key] > max) issues.push('אחד הנתונים מחוץ לטווח המותר.');
     else if (key.endsWith('Age') && !Number.isInteger(s[key])) issues.push('יש להזין גיל בשנים שלמות.');
@@ -378,8 +379,8 @@ export default function App() {
               {field('pensionAge', 'גיל משיכת פנסיה', 'גיל תחילת הקצבה. מתחת ל־60 מוצג תרחיש אזהרה בלבד, ולא זכאות לקצבה. גיל הזכאות לפטור תלוי בדין ובנתונים האישיים.', { min: 50, max: 75, step: 1, unit: 'שנים', children: <TaxAlert gender={draftState.gender} age={draftState.pensionAge} /> })}
             </Section>
             <Section icon={Wallet} title="הון ונכסים לגישור" index="02">
-              {field('liquidSavings', 'חיסכון נזיל / תיק השקעות', 'תיק השקעות או חיסכון נזיל. במודל מנוכה מס אפקטיבי של 15% מהמשיכה היחסית מהתיק, כהנחה ל־25% מס על רכיב רווח של 60%.')}
-              {field('hishtalmut', 'קרן השתלמות', 'המודל מניח קרן נזילה ומשיכה פטורה ממס בכפוף לתקרות ולתנאי הדין. הפקדות מעבר לתקרה או קרן שטרם נזילה עשויות להיות חייבות במס.')}
+              {field('liquidSavings', 'חיסכון נזיל / תיק השקעות', 'תיק השקעות או חיסכון נזיל. במודל מנוכה מס אפקטיבי של 15% מהמשיכה היחסית מהתיק, כהנחה ל־25% מס על רכיב רווח של 60%.', { max: LIQUID_ASSET_MAX })}
+              {field('hishtalmut', 'קרן השתלמות', 'המודל מניח קרן נזילה ומשיכה פטורה ממס בכפוף לתקרות ולתנאי הדין. הפקדות מעבר לתקרה או קרן שטרם נזילה עשויות להיות חייבות במס.', { max: LIQUID_ASSET_MAX })}
               {field('targetCapital', 'יעד הון להשאיר בגיל פנסיה', 'כרית ביטחון או ירושה שנותרת מההון הזמין בסוף הגישור, בערכי היום. היעד אינו כולל את החיסכון הפנסיוני.')}
               {field('annualReturn', 'תשואה שנתית ריאלית צפויה', 'תשואה משוערת לאחר אינפלציה ודמי ניהול, לפני מס משיכה. התשואה קבועה במודל; הפסדים וסיכון רצף תשואות אינם נכללים.', { min: 0, max: 10, step: 0.5, unit: '%' })}
             </Section>
