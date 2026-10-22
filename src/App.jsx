@@ -433,20 +433,23 @@ const styles = `
 @media(max-width:390px){.hero-amount>span{font-size:47px}.hero-bottom{gap:8px}.hero-bottom span{font-size:8px}.hero-bottom strong{font-size:17px}.hero-bottom em{display:block;margin:3px 0 0}.metric-card>strong{font-size:22px}.metric-card>small{font-size:9px}.pension-main{grid-template-columns:1fr}.pension-detail{border:0;padding:0}.chart-readout{font-size:9px;gap:8px}.two-fields .field-heading{min-height:34px}}
 .dock-preview{display:none}
 @media(max-width:720px){
-.results{scroll-margin-top:12px}.brand{min-height:44px}.header-tag{font-size:11px}.intro p{font-size:14px;line-height:1.8}.privacy-badge{font-size:12px}.privacy-more{min-height:32px}.text-link{display:inline-flex;align-items:center;min-height:32px;font-size:13px}
-.field-heading,.two-fields .field-heading{font-size:13px;min-height:24px;margin-bottom:8px}.two-fields{grid-template-columns:1fr;gap:0}
+.results{scroll-margin-top:12px}.brand{min-height:44px}.header-tag{font-size:14px}.intro p{font-size:16px;line-height:1.8}.privacy-badge{font-size:14px}.privacy-more{min-height:32px}.text-link{display:inline-flex;align-items:center;min-height:32px;font-size:14px}
+.field-heading,.two-fields .field-heading{font-size:16px;line-height:1.6;min-height:26px;margin-bottom:10px}.two-fields{grid-template-columns:1fr;gap:0}
 .info-button{width:44px;height:44px;margin:-12px -10px;padding:0}
-.tooltip-wrap{position:static}.numeric-field,.gender-row{position:relative}.tooltip{top:36px;bottom:auto;inset-inline:0;width:auto;max-width:none;font-size:13px;pointer-events:none}.tooltip.tooltip-above{top:auto;bottom:calc(100% + 6px)}
-.gender-toggle button{min-height:44px;min-width:64px;font-size:13px;padding:0 18px}
-.number-control,.two-fields .number-control{height:54px;gap:6px;padding-inline:12px 4px}.number-control input,.two-fields .number-control input{font-size:16px;height:100%}.number-control .unit,.two-fields .number-control .unit{font-size:12px}.number-control button{min-width:44px;height:44px;border-radius:7px}
-.range{height:44px;margin:4px 0 0;padding:20px 0;background-clip:content-box!important}.range::-webkit-slider-thumb{width:26px;height:26px}.range::-moz-range-thumb{width:18px;height:18px}.range-labels{font-size:11px}
-.tax-alert,.tax-alert strong{font-size:12px}.tax-alert small{font-size:11px}
-.calculate-dock{padding:12px 16px calc(12px + env(safe-area-inset-bottom))}.calculate-button{min-height:52px;font-size:15px}.calculate-dock>span{font-size:11px;margin-top:8px}
-.dock-preview{display:flex;align-items:center;gap:8px;font-size:12px;color:#c3ccdd;margin-bottom:10px}.dock-preview b{margin-inline-start:auto;font-size:17px;color:#eef2fc;font-variant-numeric:tabular-nums}.dock-preview .delta{font-size:12px}
-.results-status{font-size:12px}.fx-button{width:44px;height:44px}.icon-button{min-width:44px;min-height:44px}.delta{font-size:12px}
-.hero-bottom{grid-template-columns:1fr 1fr;gap:12px}.hero-bottom span,.hero-bottom em{font-size:11px}.hero-bottom strong{font-size:19px}.hero-bottom>div:last-child{display:flex;grid-column:1/-1;flex-direction:row;justify-content:space-between;align-items:baseline;border-inline-start:0;padding-inline-start:0;border-top:1px solid #40496982;padding-top:12px}
-.metric-top{font-size:12px}.metric-card>small{font-size:11px}.chart-panel .eyebrow{font-size:11px}.chart-legend,.chart-readout{font-size:12px}.chart-footer{font-size:11px}.capital-chart{touch-action:pan-y}.svg-label{font-size:13px}
-.pension-detail>span,.pension-note{font-size:12px}.section-index,.phase-badge,.estimate-badge,.pension-title .eyebrow{font-size:11px}.notice p{font-size:12px}.site-footer{font-size:12px}.site-footer nav a{display:inline-flex;align-items:center;min-height:44px;padding-inline:8px}
+.tooltip-wrap{position:static}.numeric-field,.gender-row{position:relative}.tooltip{top:36px;bottom:auto;inset-inline:0;width:auto;max-width:none;font-size:14px;pointer-events:none}.tooltip.tooltip-above{top:auto;bottom:calc(100% + 6px)}
+.gender-toggle button{min-height:44px;min-width:64px;font-size:16px;padding:0 18px}
+.number-control,.two-fields .number-control{height:54px;gap:6px;padding-inline:12px 4px}.number-control input,.two-fields .number-control input{font-size:18px;height:100%}.number-control .unit,.two-fields .number-control .unit{font-size:14px}.number-control button{min-width:44px;height:44px;border-radius:7px}
+.range{height:44px;margin:4px 0 0;padding:20px 0;background-clip:content-box!important}.range::-webkit-slider-thumb{width:26px;height:26px}.range::-moz-range-thumb{width:18px;height:18px}.range-labels{font-size:14px}
+.tax-alert,.tax-alert strong{font-size:14px}.tax-alert small{font-size:14px}
+.calculate-dock{padding:12px 16px calc(12px + env(safe-area-inset-bottom))}.calculate-button,.entry-disclaimer .calculate-button{min-height:52px;font-size:16px}.calculate-dock>span{font-size:14px;margin-top:8px}
+.dock-preview{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:14px;color:#c3ccdd;margin-bottom:10px}.dock-preview b{margin-inline-start:auto;font-size:18px;color:#eef2fc;font-variant-numeric:tabular-nums}.dock-preview .delta{font-size:14px}
+.results-status{font-size:14px;flex-wrap:wrap}.fx-button{width:44px;height:44px}.icon-button{min-width:44px;min-height:44px}.delta{font-size:14px}
+.hero-subtitle{font-size:16px}.hero-amount>small,.hero-warning{font-size:14px}
+.hero-bottom{grid-template-columns:1fr 1fr;gap:12px}.hero-bottom span,.hero-bottom em,.hero-bottom small{font-size:14px}.hero-bottom strong{font-size:19px}.hero-bottom>div:last-child{display:flex;grid-column:1/-1;flex-direction:row;flex-wrap:wrap;justify-content:space-between;align-items:baseline;border-inline-start:0;padding-inline-start:0;border-top:1px solid #40496982;padding-top:12px}
+.metric-top,.metric-card>small{font-size:14px;line-height:1.6}.chart-panel .eyebrow{font-size:14px}.chart-legend,.chart-readout{font-size:14px}.chart-footer{font-size:14px}.capital-chart{touch-action:pan-y}.svg-label{font-size:16px}
+.pension-main{grid-template-columns:1fr}.pension-detail{border:0;padding:0}.pension-detail>span,.pension-detail b,.pension-note,.pension-amount small{font-size:14px}.pension-main>div>.muted{font-size:16px}.pension-card .card-heading{flex-wrap:wrap}
+.eyebrow,.section-index,.phase-badge,.estimate-badge,.pension-title .eyebrow,.controls-header p,.field-error{font-size:14px}.section-heading h3{font-size:16px}.notice,.notice p,.notice strong{font-size:14px}.site-footer{font-size:14px}.site-footer nav a{display:inline-flex;align-items:center;min-height:44px;padding-inline:8px}
+.formula-modal p,.information-lead,.information-card section p{font-size:16px}.formula,.formula-values,.entry-disclaimer .agreement-label,.entry-links,.entry-disclaimer>small,.document-date{font-size:14px}.formula-values>div{flex-wrap:wrap}
 }
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}.confetti{display:none}}
 `;

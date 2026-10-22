@@ -26,6 +26,15 @@ const expectNoOverflow = async (page) => {
   expect(result.scrollWidth).toBeLessThanOrEqual(result.width);
 };
 
+const expectReadableText = async (root) => {
+  const tinyText = await root.evaluate((container) => [...container.querySelectorAll('*')]
+    .filter((element) => !element.closest('svg, .sr-only') && element.getBoundingClientRect().width > 0 && element.getBoundingClientRect().height > 0 && getComputedStyle(element).visibility !== 'hidden')
+    .filter((element) => [...element.childNodes].some((node) => node.nodeType === Node.TEXT_NODE && node.textContent.trim()))
+    .filter((element) => parseFloat(getComputedStyle(element).fontSize) < 14)
+    .map((element) => `${element.textContent.trim().slice(0, 30)} ${getComputedStyle(element).fontSize}`));
+  expect(tinyText, 'mobile text smaller than 14px').toEqual([]);
+};
+
 test.beforeEach(({ isMobile }) => test.skip(!isMobile, 'Mobile-only checks'));
 
 for (const [name, device] of [['default phone', {}], ['small 360px phone', SMALL_PHONE]]) {
@@ -36,6 +45,7 @@ for (const [name, device] of [['default phone', {}], ['small 360px phone', SMALL
       await page.goto('/');
       const dialog = page.getByRole('dialog');
       await expect(dialog).toBeVisible();
+      await expectReadableText(dialog);
       const box = await dialog.boundingBox();
       const viewport = page.viewportSize();
       expect(box.x).toBeGreaterThanOrEqual(0);
@@ -52,6 +62,7 @@ for (const [name, device] of [['default phone', {}], ['small 360px phone', SMALL
       for (const hash of ['#privacy', '#disclaimer']) {
         await page.goto(`/${hash}`);
         await expect(page.locator('#information')).toBeVisible();
+        await expectReadableText(page.locator('#information'));
         await expectNoOverflow(page);
       }
     });
@@ -70,16 +81,15 @@ for (const [name, device] of [['default phone', {}], ['small 360px phone', SMALL
           .filter((element) => { const box = element.getBoundingClientRect(); return box.width < 44 || box.height < 44; })
           .map((element) => `${label(element)} ${Math.round(element.getBoundingClientRect().width)}x${Math.round(element.getBoundingClientRect().height)}`);
         const smallInputs = [...document.querySelectorAll('main input[type=text]')].filter(visible)
+          .filter((element) => parseFloat(getComputedStyle(element).fontSize) < 18).map(label);
+        const smallLabels = [...document.querySelectorAll('.field-heading, .section-heading h3')]
           .filter((element) => parseFloat(getComputedStyle(element).fontSize) < 16).map(label);
-        const tinyText = [...document.querySelectorAll('main *, footer *')]
-          .filter((element) => !element.closest('svg') && visible(element) && [...element.childNodes].some((node) => node.nodeType === Node.TEXT_NODE && node.textContent.trim()))
-          .filter((element) => parseFloat(getComputedStyle(element).fontSize) < 11)
-          .map((element) => `${element.textContent.trim().slice(0, 30)} ${getComputedStyle(element).fontSize}`);
-        return { small, smallInputs, tinyText };
+        return { small, smallInputs, smallLabels };
       });
       expect(report.small, 'touch targets smaller than 44x44').toEqual([]);
-      expect(report.smallInputs, 'inputs under 16px zoom on iOS').toEqual([]);
-      expect(report.tinyText, 'text smaller than 11px').toEqual([]);
+      expect(report.smallInputs, 'mobile inputs smaller than 18px').toEqual([]);
+      expect(report.smallLabels, 'field labels smaller than 16px').toEqual([]);
+      await expectReadableText(page.locator('.app-shell'));
     });
 
     test('sticky dock previews the draft and calculating scrolls to the results', async ({ page }) => {
@@ -94,6 +104,7 @@ for (const [name, device] of [['default phone', {}], ['small 360px phone', SMALL
       await expect(preview).toBeInViewport();
       await expect(preview).toContainText('+');
       await expect(preview).not.toContainText(/NaN|Infinity/);
+      await expectNoOverflow(page);
 
       await commit(page).tap();
       await expect(page.getByTestId('bridge-card')).toBeInViewport();
@@ -138,6 +149,7 @@ for (const [name, device] of [['default phone', {}], ['small 360px phone', SMALL
         await button.tap();
         const tooltip = page.locator(`#${await button.getAttribute('aria-describedby')}`);
         await expect(tooltip).toBeVisible();
+        await expect(tooltip).toHaveCSS('font-size', '14px');
         await expectInside(tooltip);
       }
 
@@ -184,7 +196,7 @@ for (const [name, device] of [['default phone', {}], ['small 360px phone', SMALL
         const label = svg.querySelector('.svg-label');
         return label.getBoundingClientRect().height;
       });
-      expect(labelSize).toBeGreaterThanOrEqual(10);
+      expect(labelSize).toBeGreaterThanOrEqual(12);
       const readout = page.getByTestId('chart-readout');
       const before = await readout.textContent();
       const box = await chart.boundingBox();
@@ -198,6 +210,7 @@ for (const [name, device] of [['default phone', {}], ['small 360px phone', SMALL
       await page.getByRole('button', { name: 'הצג נוסחת חישוב' }).tap();
       const dialog = page.getByRole('dialog');
       await expect(dialog).toBeVisible();
+      await expectReadableText(dialog);
       const box = await dialog.boundingBox();
       const viewport = page.viewportSize();
       expect(box.x).toBeGreaterThanOrEqual(0);
