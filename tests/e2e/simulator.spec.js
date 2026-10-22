@@ -64,10 +64,56 @@ test('uses female threshold live without changing locked results', async ({ page
 });
 
 test('shows the headline without the intro tagline or profile selectors', async ({ page }) => {
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('מתי אפשר לעבוד כי רוצים, לא כי חייבים?');
+  await expect(page.getByRole('heading', { level: 1 })).not.toBeEmpty();
+  await expect(page.getByRole('button', { name: 'רוצים סיבה טובה יותר?', exact: true })).toBeVisible();
   await expect(page.getByText('העתיד שלך, בתנאים שלך', { exact: true })).toHaveCount(0);
   await expect(page.getByRole('button', { name: /ארכיטקט תוכנה|הייטקיסט צעיר|מעבר להוראה/ })).toHaveCount(0);
   await expect(page.locator('.profiles-bar')).toHaveCount(0);
+});
+
+test('rotates every punchline by keyboard without repeating or changing the scenario', async ({ page }) => {
+  await page.addInitScript(() => { Math.random = () => 0; });
+  await page.reload();
+  await acceptDisclaimer(page);
+  const heading = page.getByRole('heading', { level: 1 });
+  const button = page.getByRole('button', { name: 'רוצים סיבה טובה יותר?', exact: true });
+  const phrases = [
+    'ה־AI רוצה להחליף אותי. אפשר להתחיל ביום ראשון?',
+    'מספיק עבודה. מתי הולכים לגלוש?',
+    'אפשר לישון עד 12, בלי לקרוא לזה חופש?',
+    'היומן מלא בפגישות. אפשר למלא אותו בכלום?',
+    'עוד ישיבה על הישיבה? עדיף ישיבה מול הים.',
+    'הקוד עובד. למה גם אני צריך?',
+    'יש לי תוכנית לחומש. חמש שנים בלי שעון מעורר.',
+    'הגיע הזמן לעדכון גרסה. פחות משרד, יותר מרפסת.',
+    'אפשר לצאת לפנסיה, לפני שהסיסמה שוב פגה?',
+    'החלום: יום ראשון שמרגיש כמו שבת.',
+  ];
+  const before = await page.getByTestId('bridge-net').textContent();
+  await field(page, 'חיסכון נזיל / תיק השקעות').fill('2,800,000');
+  await expect(heading).toHaveText(phrases[0]);
+  await expect(heading).toHaveAttribute('aria-live', 'polite');
+  await expect(heading).toHaveAttribute('aria-atomic', 'true');
+  await button.focus();
+  for (let index = 1; index <= phrases.length; index++) {
+    await page.keyboard.press(index % 2 ? 'Enter' : 'Space');
+    await expect(heading).toHaveText(phrases[index % phrases.length]);
+    await expect(button).toBeFocused();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  }
+  await expect(field(page, 'חיסכון נזיל / תיק השקעות')).toHaveValue('2,800,000');
+  await expect(page.getByTestId('bridge-net')).toHaveText(before);
+  await expect(page.getByText('מצב טיוטה - לחץ על חישוב לעדכון')).toBeVisible();
+});
+
+test('randomizes the initial punchline and avoids repeats at the upper random boundary', async ({ page }) => {
+  await page.addInitScript(() => { Math.random = () => 0.999999; });
+  await page.reload();
+  await acceptDisclaimer(page);
+  const heading = page.getByRole('heading', { level: 1 });
+  await expect(heading).toHaveText('החלום: יום ראשון שמרגיש כמו שבת.');
+  await page.getByRole('button', { name: 'רוצים סיבה טובה יותר?', exact: true }).click();
+  await expect(heading).toHaveText('אפשר לצאת לפנסיה, לפני שהסיסמה שוב פגה?');
 });
 
 test('steppers and range update both paired controls with formatted amounts', async ({ page }) => {

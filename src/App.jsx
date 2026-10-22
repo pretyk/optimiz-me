@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
-import { ArrowLeft, BriefcaseBusiness, Calculator, ChartNoAxesCombined, Check, CircleHelp, Github, Info, Landmark, LockKeyhole, Minus, Plus, ShieldCheck, Target, TrendingUp, TriangleAlert, Wallet, X } from 'lucide-react';
+import { ArrowLeft, BriefcaseBusiness, Calculator, ChartNoAxesCombined, Check, CircleHelp, Github, Info, Landmark, LockKeyhole, Minus, Plus, ShieldCheck, Shuffle, Target, TrendingUp, TriangleAlert, Wallet, X } from 'lucide-react';
 
 export const DEFAULT_STATE = { currentAge: 50, gender: 'male', bridgeStartAge: 52, pensionAge: 67, liquidSavings: 1800000, hishtalmut: 1200000, targetCapital: 500000, pensionBalance: 2500000, annualReturn: 4 };
 const GITHUB_URL = 'https://github.com/pretyk/retirator';
@@ -314,6 +314,33 @@ function FormulaModal({ result, onClose }) {
   </ModalFrame>;
 }
 
+const RETIREMENT_PUNCHLINES = [
+  [<>ה־<bdi dir="ltr">AI</bdi> רוצה להחליף אותי.</>, 'אפשר להתחיל ביום ראשון?'],
+  ['מספיק עבודה.', 'מתי הולכים לגלוש?'],
+  [<>אפשר לישון עד <bdi dir="ltr">12</bdi>,</>, 'בלי לקרוא לזה חופש?'],
+  ['היומן מלא בפגישות.', 'אפשר למלא אותו בכלום?'],
+  ['עוד ישיבה על הישיבה?', 'עדיף ישיבה מול הים.'],
+  ['הקוד עובד.', 'למה גם אני צריך?'],
+  ['יש לי תוכנית לחומש.', 'חמש שנים בלי שעון מעורר.'],
+  ['הגיע הזמן לעדכון גרסה.', 'פחות משרד, יותר מרפסת.'],
+  ['אפשר לצאת לפנסיה,', 'לפני שהסיסמה שוב פגה?'],
+  ['החלום: יום ראשון', 'שמרגיש כמו שבת.'],
+];
+
+function RetirementHeadline() {
+  const [index, setIndex] = useState(() => Math.floor(Math.random() * RETIREMENT_PUNCHLINES.length));
+  const changePunchline = () => {
+    const offset = 1 + Math.floor(Math.random() * (RETIREMENT_PUNCHLINES.length - 1));
+    setIndex((previous) => (previous + offset) % RETIREMENT_PUNCHLINES.length);
+  };
+  const [setup, punchline] = RETIREMENT_PUNCHLINES[index];
+  return <div className="intro-copy">
+    <h1 aria-live="polite" aria-atomic="true">{setup} <span>{punchline}</span></h1>
+    <button type="button" className="punchline-button" onClick={changePunchline}><Shuffle size={15} aria-hidden="true" />רוצים סיבה טובה יותר?</button>
+    <p>גלו כמה ההון שלכם יכול לספק בכל חודש, איך מגשרים עד הפנסיה ומה נשאר ליום שאחרי.</p>
+  </div>;
+}
+
 export default function App() {
   const [draftState, setDraftState] = useState({ ...DEFAULT_STATE });
   const [committedState, setCommittedState] = useState({ ...DEFAULT_STATE });
@@ -375,7 +402,7 @@ export default function App() {
     <a href={page === 'simulator' ? '#main' : '#information'} className="skip-link" onClick={(event) => { event.preventDefault(); document.getElementById(page === 'simulator' ? 'main' : 'information')?.focus(); }}>דלג לתוכן הראשי</a>
     <header className="site-header"><div className="header-inner"><a className="brand" href="#" aria-label="Retirator — עמוד ראשי"><span className="brand-mark"><ChartNoAxesCombined size={22} /></span><span dir="ltr">retir<span className="brand-accent">ator</span></span></a><div className="header-center"><span className="live-dot" />פחות אי־ודאות. יותר חופש.</div><span className="header-tag">סימולטור פרישה מוקדמת <span>גרסה 1.0</span></span></div></header>
     <main id="main" tabIndex={-1} className="main-container" hidden={page !== 'simulator'} inert={!accepted}>
-      <div className="intro"><div><h1>מתי אפשר לעבוד כי רוצים, <span>לא כי חייבים?</span></h1><p>גלו כמה ההון שלכם יכול לספק בכל חודש, איך מגשרים עד הפנסיה ומה נשאר ליום שאחרי.</p></div><div className="privacy-badge"><ShieldCheck size={21} /><div><span>הנתונים מחושבים בדפדפן שלך בלבד — לא נשלחים לשרת</span><a className="privacy-more" href="#privacy">למידע נוסף על הפרטיות<ArrowLeft size={12} /></a></div></div></div>
+      <div className="intro"><RetirementHeadline /><div className="privacy-badge"><ShieldCheck size={21} /><div><span>הנתונים מחושבים בדפדפן שלך בלבד — לא נשלחים לשרת</span><a className="privacy-more" href="#privacy">למידע נוסף על הפרטיות<ArrowLeft size={12} /></a></div></div></div>
       <div className="workspace">
         <aside className="controls panel" aria-labelledby="controls-title">
           <div className="controls-header"><div><h2 id="controls-title">בונים את התרחיש שלך</h2><p>כל שינוי קטן פותח אפשרות חדשה</p></div><span className="icon-box"><Calculator size={20} /></span></div>
@@ -439,6 +466,8 @@ const styles = `
 @media(max-width:900px){.workspace{grid-template-columns:300px minmax(0,1fr);gap:16px}.header-center{display:none}.main-container{padding-inline:20px}.header-inner{padding-inline:20px}.privacy-badge{max-width:190px;font-size:10px}.profiles-label{display:none}.profile-buttons{width:100%;justify-content:space-between}.fields-body{padding-inline:17px}.controls-header{padding-inline:17px}.calculate-dock{padding-inline:17px}.hero-bottom{grid-template-columns:1fr 1fr}.hero-bottom>div:last-child{display:none}.summary-grid{gap:10px}.metric-card{padding:14px}.metric-card>strong{font-size:21px}.metric-top{font-size:10px}.metric-top svg{display:none}.pension-main{grid-template-columns:1fr}.pension-detail{border-inline-start:0;padding-inline-start:0}.pension-card,.chart-panel{padding-inline:18px}.hero-amount>span{font-size:42px}.chart-legend{gap:10px}.chart-legend>span:last-child{display:none}.pension-amount strong{font-size:34px}}
 @media(max-width:720px){.site-header{height:66px}.header-inner{padding-inline:18px}.brand{font-size:22px}.header-tag{font-size:10px}.header-tag>span{display:none}.main-container{padding:28px 16px 0}.intro{flex-direction:column;align-items:flex-start;gap:17px;margin-bottom:22px}h1{font-size:29px;max-width:450px}h1>span{display:block}.intro p{font-size:12px}.privacy-badge{max-width:none;padding:10px 12px;font-size:10px;width:100%;justify-content:center}.privacy-badge svg{width:17px}.profiles-bar{padding:12px;overflow:visible}.profile-buttons{flex-wrap:wrap;justify-content:flex-start;gap:8px}.profile-button{flex-grow:1;justify-content:center;font-size:10px;padding:10px 8px}.profile-button>svg:last-child{display:none}.workspace{grid-template-columns:1fr;gap:24px}.fields-body{padding-inline:20px}.controls-header{padding-inline:20px}.two-fields .field-heading{min-height:18px}.input-section{padding-top:20px}.numeric-field{margin-bottom:21px}.controls{overflow:visible}.calculate-dock{position:sticky;bottom:0;z-index:10;border-top:1px solid #3b4366;box-shadow:0 -8px 22px #0003}.hero-card{padding-inline:23px}.hero-amount>span{font-size:56px}.hero-bottom{grid-template-columns:1.3fr 1fr .8fr}.hero-bottom>div:last-child{display:flex}.hero-bottom strong{font-size:19px}.summary-grid{gap:12px}.metric-card{padding:17px}.metric-card>strong{font-size:25px}.metric-top{font-size:10px}.chart-panel,.pension-card{padding-inline:19px}.pension-main{grid-template-columns:1fr 1fr;gap:15px}.pension-detail{border-inline-start:1px solid #30394f;padding-inline-start:15px}.pension-amount strong{font-size:28px}.site-footer{flex-wrap:wrap;justify-content:center;text-align:center}.site-footer>span:nth-child(2){display:none}.site-footer>span:first-child{margin-inline-end:auto}.results-status{font-size:10px}.tooltip{inset-inline-end:-5px;width:210px}.tax-alert{font-size:11px}.tax-alert strong{font-size:11px}.tax-alert small{font-size:10px}}
 @media(max-width:390px){.hero-amount>span{font-size:47px}.hero-bottom{gap:8px}.hero-bottom span{font-size:8px}.hero-bottom strong{font-size:17px}.hero-bottom em{display:block;margin:3px 0 0}.metric-card>strong{font-size:22px}.metric-card>small{font-size:9px}.pension-main{grid-template-columns:1fr}.pension-detail{border:0;padding:0}.chart-readout{font-size:9px;gap:8px}.two-fields .field-heading{min-height:34px}}
+.intro-copy{min-width:0;flex:1}.intro-copy h1{min-height:2.9em;text-wrap:balance}.punchline-button{display:inline-flex;align-items:center;gap:8px;min-height:44px;margin-top:8px;padding:6px 10px;border:1px solid #3b4366;border-radius:8px;background:#171d2c;color:#c7d2fe;font-size:14px}.punchline-button:hover{background:#232342;border-color:#818cf8}
+@media(max-width:720px){.intro-copy{width:100%}.intro-copy h1{min-height:4.35em}}
 .dock-preview{display:none}
 @media(max-width:720px){
 .results{scroll-margin-top:12px}.brand{min-height:44px}.header-tag{font-size:14px}.intro p{font-size:16px;line-height:1.8}.privacy-badge{font-size:14px}.privacy-more{min-height:32px}.text-link{display:inline-flex;align-items:center;min-height:32px;font-size:14px}

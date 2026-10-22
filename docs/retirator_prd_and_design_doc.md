@@ -6,6 +6,11 @@
 > "מתי אפשר לעבוד כי רוצים, לא כי חייבים?".
 > The original requirements below remain as historical design context.
 
+> Subsequent user-directed revision (22 October 2026): replace the fixed headline
+> with ten humorous Hebrew retirement punchlines, randomly chosen on page load.
+> The "רוצים סיבה טובה יותר?" button selects a different random line on demand,
+> without automatic rotation, storage, network requests, or scenario changes.
+
 > Implementation notes: the original requirements below are preserved. The stated
 > PMT benchmark is incorrect: the specified formula gives ₪20,291.80465685561
 > (PV = 3,000,000, FV = 0, N = 204, annual rate = 4%), not ₪16,861.
