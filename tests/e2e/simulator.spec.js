@@ -62,8 +62,9 @@ test('uses female threshold live without changing locked results', async ({ page
   await expect(page.getByTestId('annuity-factor')).toHaveText('200');
 });
 
-test('shows the updated headline without profile selectors', async ({ page }) => {
+test('shows the headline without the intro tagline or profile selectors', async ({ page }) => {
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('מתי אפשר לעבוד כי רוצים, לא כי חייבים?');
+  await expect(page.getByText('העתיד שלך, בתנאים שלך', { exact: true })).toHaveCount(0);
   await expect(page.getByRole('button', { name: /ארכיטקט תוכנה|הייטקיסט צעיר|מעבר להוראה/ })).toHaveCount(0);
   await expect(page.locator('.profiles-bar')).toHaveCount(0);
 });
