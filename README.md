@@ -209,7 +209,8 @@ GitHub link attributes, and accessibility before acceptance.
 
 `tests/e2e/mobile.spec.js` runs on a Pixel 7 and on a small 360px phone. It
 checks for no horizontal overflow on every page, touch targets of at least 44×44px,
-16px inputs (no iOS zoom on focus), text of at least 11px, the sticky
+18px inputs (avoiding automatic iOS focus zoom), 16px field labels, supporting
+text of at least 14px (including legal pages and dialogs), the sticky
 calculate bar and its draft preview, scrolling to the results after
 calculating, tap-to-open tooltips that stay on screen, touch steppers, tapping
 the chart, dialogs that fit the screen, and axe accessibility.
